@@ -484,3 +484,19 @@ ul.tabset a:hover span {
  height: 23px;
  padding: 4px 25px 0px 0px;
 }
+
+
+table.itable  {
+	border-collapse: collapse;
+}
+table.itable td, table.itable th {
+    border: 1px solid black;
+    padding: 3px;        
+}
+
+table.itable_toolbar td, 
+table.itable_toolbar th {
+	padding: 3px;
+	border: none;
+}
+

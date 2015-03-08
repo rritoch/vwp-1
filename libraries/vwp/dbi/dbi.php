@@ -11,8 +11,7 @@
  * @author Ralph Ritoch <rritoch@gmail.com>
  * @copyright (c) Ralph Ritoch - All Rights Reserved
  * @link http://www.vnetpublishing.com VNetPublishing.Com
- * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License
- * @todo Implement create/modify table
+ * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License 
  * @todo Implement database drivers via plugin support    
  */
 
@@ -23,6 +22,20 @@ class_exists("VWP") or die();
  */
 
 VWP::RequireLibrary('vwp.filesystem.folder');
+
+
+/**
+ * Require Types
+ */
+
+VWP::RequireLibrary('vwp.dbi.types');
+
+
+/**
+ * Require Query Support
+ */
+
+VWP::RequireLibrary('vwp.dbi.query');
 
 /**
  * Virtual Web Platform - DBI Database API
@@ -207,7 +220,8 @@ class VDBI extends VObject
                 if (file_exists($dbFilename)) {                	
                     include_once($dbFilename);
                     if (class_exists($className)) {       
-                        self::$_databases[$dbName] = new $className();       
+                        self::$_databases[$dbName] = new $className();
+                        self::$_databases[$dbName]->_dbid = $dbName;       
                     }
                 }               
             }    
@@ -432,6 +446,18 @@ class VDBI extends VObject
         return $db_list; 
     }
  
+    /**
+     * Create Query
+     * 
+     * @access public
+     */
+    
+    function &createQuery()
+    {
+        $query = new VDBI_Query;
+        return $query;
+    }
+    
     /**
      * Class constructor
      * 

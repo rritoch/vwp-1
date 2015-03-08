@@ -53,16 +53,19 @@ class VMssqlRow extends VMssqlTable
      * @access public        
      */
  
-    function set($key,$val = null) 
+    function &set($key,$value) 
     { 
-        if (!isset($this->fields[$key])) {
-            $this->fields[$key] = array(
-                "name"=>$key,
-                "value"=>$val,
-               );
+    	$fields = $this->fields;
+    	
+        if (!isset($fields[$field])) {
+            $fields[$field] = array(
+                "name"=>$field,
+                "value"=>$value,
+            );
         }
-        $this->fields[$key]["value"] = $val;
-        return $val;    
+        $fields[$field]["value"] = $value;
+        $this->fields = $fields;
+        return $value;   
     }
  
     /**

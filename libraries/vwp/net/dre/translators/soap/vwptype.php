@@ -264,6 +264,7 @@ class VSOAPVWPTypeTranslator extends VSOAPTranslator
     public static function encodeParam($value,$type, $typeNamespace, $name, $targetNamespace) 
     {
   
+    	$args = func_get_args();    	
         $param = null;
         switch($type) {
             case "string":
@@ -274,7 +275,7 @@ class VSOAPVWPTypeTranslator extends VSOAPTranslator
                 foreach($value as $item) {
                     $items[] = new SoapVar($item,XSD_STRING,null,null,'item',$typeNamespace);
                 }
-                $param =  new SoapVar($items,SOAP_ENC_ARRAY,'Array',$typeNamespace,$name,$targetNamespace);   
+                $param = new SoapVar($items,SOAP_ENC_ARRAY,'Array',$typeNamespace,$name,$targetNamespace);   
                 break;
             case "map":
                 // Must use BUGGY PHP encoding to avoid server 500 error!
@@ -701,7 +702,7 @@ class VSOAPVWPTypeTranslator extends VSOAPTranslator
     
     function encodeRequestHeaders($headers) 
     {
-     
+         	    	
         $encHeaders = null;
      
         if (isset($headers["C_Id"])) {

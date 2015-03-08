@@ -442,6 +442,27 @@ class VWidget extends VObject
     }
     
     /**
+     * Check if widget is the current active widget
+     *
+     * @return boolean true if widget is currently active widget
+     * @access public
+     */
+    
+    function isActive() 
+    {
+    	$bcfg = array('alias'=>'content');    	
+        $screenInfo = array();     
+        foreach($bcfg as $key=>$val) {
+            $info = array(urlencode($key),urlencode($val));
+            $info = urlencode(implode(':',$info));
+            array_push($screenInfo,$info);
+        }     
+        $screenId = implode(':',$screenInfo);    	
+    	
+        return $screenId == v()->shell()->getScreen();    	
+    }
+    
+    /**
      * Set widget visibility
      * 
      * @param boolean $visible Visible
@@ -628,10 +649,10 @@ class VWidget extends VObject
     
         // set the default template search path
         if (array_key_exists('template_path', $config)) {
-            // user-defined dirs
+            // user-defined dirs            
             $this->setPath('template', $config['template_path']);
         } else {   
-            $n = str_replace('.',DS.'widgets'.DS,strtolower($this->_id));           
+            $n = str_replace('.',DS.'widgets'.DS,strtolower($this->_id));
             $this->setPath('template', $this->_basePath.DS.'widgets'.DS.$n.DS.'layouts');
         }	
     
@@ -734,10 +755,7 @@ class VWidget extends VObject
     	if (!isset($this->_format)) {
             $this->_format = 'html';
             $doc = & VWP::getDocument();
-            $docClassName = get_class($doc);
-            if (substr(strtolower($docClassName),strlen($docClassName) - 8) == "document") {
-                $this->_format = strtolower(substr($docClassName,0,strlen($docClassName) - 8)); 
-            }
+            $this->_format = $doc->getDocumentType();
     	}
     	return $this->_format;     	
     }
@@ -793,11 +811,12 @@ class VWidget extends VObject
             $themeDriver = new $themedriverClassName();
             $themeDriver->setWidget($this);
                      
-            if ($themeDriver->getLayout($widgetLayout,$format)) {
+            if ($themeDriver->getLayout($widgetLayout,$format)) {            	
                 return;
             }
         }
-     
+
+                
         // Check Theme
      
         $themeBase = VPATH_BASE.DS.'themes'.DS.$themeType.DS.$theme;
@@ -807,16 +826,16 @@ class VWidget extends VObject
         $templateDir = $themeBase.DS.'apps'.DS.$appName.DS.$widgetName;  
      
         $layoutFile = $this->_createFilename('template',array('name' => $widgetLayout));
-      
+                      
         $layoutFilename = $templateDir.DS.$layoutFile;  
-          
+                
         $vfile =& v()->filesystem()->file();
         
-        if ($vfile->exists($layoutFilename)) {
+        if ($vfile->exists($layoutFilename)) {        	
             include($layoutFilename);
             return;
         }
-            
+                   
         // Load Default
        	       	
         $result = $this->loadTemplate($tpl);
@@ -824,7 +843,7 @@ class VWidget extends VObject
         if (VWP::isError($result)) {
             return $result;
         }
-     
+        
         echo $result;		
     }
     
@@ -1187,13 +1206,12 @@ class VWidget extends VObject
      
         // Build the view class name
         $widgetClass = $classPrefix . ucfirst($widgetId);
-                 
+        
+        
         if ( !class_exists( $widgetClass ) ) {		 
-            VWP::RequireLibrary( 'vwp.filesystem.path' );			
-       
+            			       
             $filename = $this->_createFileName( 'widget', array( 'name' => $widgetName ) );
-       
-           	           		
+                        
             $path = v()->filesystem()->path()->find(
                      $this->_path['widget'],
                      $filename       
@@ -1340,21 +1358,23 @@ class VWidget extends VObject
                 break;
             case 'template' :
                 $doc = & VWP::getDocument();  
-                //$format = 'html';
-                //$format = strtolower($doc->getDocumentType());
                 $format = $this->getFormat();   
-                $filename = $format.DS.strtolower($parts['name']).'.'.$this->_layoutExt;
-                          
+                $filename = $format.DS.strtolower($parts['name']).'.'.$this->_layoutExt;                          
              break;
             case 'requestlistener':
+            	// relative to widget path
                 $name = $parts['name'];              
                 $s = explode(".",$name);
                 $baseName = array_pop($s);
+                
                 $prefix = '';
+                /*
                 foreach($s as $p) {
                     $prefix.= $p.DS.'widgets'.DS;
-                }   				
-                $filename = $prefix.strtolower($baseName).DS.'listeners'.DS.strtolower($parts['proto']).'.php';            	            	
+                }
+                */   				
+                $filename = $prefix.strtolower($baseName).DS.'listeners'.DS.strtolower($parts['proto']).'.php';                
+                
             	break;
     			
        default :
@@ -1422,7 +1442,7 @@ class VWidget extends VObject
     function assignRef($key, &$val) 
     {
         if (is_string($key) && substr($key, 0, 1) != '_') {
-            $this->$key =& $val;
+            $this->$key = $val;
             return true;
         }
         return false;
@@ -1612,7 +1632,7 @@ class VWidget extends VObject
      * @access public 
      */
     
-    public function setRequestListener($proto,$widgetId) 
+    public function setRequestListener($proto,$widgetId,$test = false) 
     {
 
     	// Locate Widget Path
@@ -1625,29 +1645,26 @@ class VWidget extends VObject
                      $this->_path['widget'],
                      $filename       
                   );			    	
-    		
+                
         if ($path) {
         	
         	// setup class Parts
         	
         	$baseName = $this->getClassPrefix();
-    	
+        	    	
     	    $prefix =  $baseName . '_' . $proto . 'Listener_';
+    	        	    
     	    $parts = explode('.',$widgetId);
-    	    for($i=0;$i<count($parts);$i++) {
-    		    $parts[$i] = ucfirst($parts[$i]);
-    	    }
-    	    $suffix = implode('_',$parts);        	
-        	
+    	    $suffix = array_pop($parts);        	
+
         	// Load Class
         	
         	$widgetPath = dirname($path);
     	    	
     	    $className = $prefix . $suffix;
-    	    	        	    
+
     	    if (!class_exists($className)) {
-    	        $filename = dirname($widgetPath).DS.$this->_createFileName('requestlistener',array('name'=>$widgetId,'proto'=>$proto));    	        
-                   	        
+    	        $filename = dirname($widgetPath).DS.$this->_createFileName('requestlistener',array('name'=>$widgetId,'proto'=>$proto));
     	        if (v()->filesystem()->file()->exists($filename)) {
     	    	    require_once($filename);
     	        }    	
@@ -1762,15 +1779,12 @@ class VWidget extends VObject
     
         //create the template file name based on the layout
         $file = isset($tpl) ? $this->_layout.'_'.$tpl : $this->_layout;
-            
+               
         // clean the file name
         $file = preg_replace('/[^A-Z0-9_\.-]/i', '', $file);
         $tpl  = preg_replace('/[^A-Z0-9_\.-]/i', '', $tpl);
     
         // load the template script
-        VWP::RequireLibrary('vwp.filesystem.path');
-     
-        // Check theme
        
         $filetofind = $this->_createFileName('template', array('name' => $file));
                 
@@ -1796,7 +1810,7 @@ class VWidget extends VObject
             ob_end_clean();
             return $this->_output;
         } else {      
-            return VWP::raiseError('Layout "' . $file . '" not found',get_class($this).':loadTemplate',500,true);
+            return VWP::raiseError('Layout "' . $filetofind . '" not found',get_class($this).':loadTemplate',500,true);
         }
     }
     

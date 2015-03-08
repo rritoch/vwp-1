@@ -323,8 +323,7 @@ class VWebShellApplication extends VShell {
         } else {
             $result = VWP::raiseWarning('Compile error!','VApplication',null,false);
         }
-        
-        unset($this->_environement[$e]);
+                
         $this->_environment[$e] = true;
         array_pop($this->_environment); 
         $this->_cur_screen = $old_screen;       

@@ -10,11 +10,11 @@
 		mode : "exact",
 		base : "<?php echo $this->base_url; ?>",
 		elements : "<?php echo htmlentities($this->editor["name"]); ?>",
-		
+		convert_urls : <?php if (isset($this->editor['convert_urls'])) { echo $this->editor['convert_urls'] ? '1' : 'false'; } else { echo 'false'; } ?>,
 		plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,inlinepopups,autosave",
 
 		// Theme options
-		theme : "advanced",
+		theme : "advanced",		
 <?php $ctr = 1; foreach($this->editor["theme_advanced_buttons"] as $btngroup) { ?>
 		theme_advanced_buttons<?php echo $ctr; ?> : "<?php echo is_array($btngroup) ? htmlentities(implode(",",$btngroup)) : htmlentities($btngroup); ?>",
 <?php $ctr++; } ?>

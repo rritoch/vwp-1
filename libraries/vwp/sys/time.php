@@ -13,6 +13,8 @@
  * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License    
  */
 
+
+
 /**
  * Virtual Web Platform - System Time
  *  
@@ -28,6 +30,24 @@
 
 class VTime extends VObject 
 {
+	/**
+	 * Date Time Formated string
+	 *
+	 * @var string $datetime;
+	 * @access public
+	 */
+	
+	protected $datetime;
+	
+	/**
+	 * Date Time Format
+	 * 
+	 * @var unknown_type
+	 * @access private
+	 */
+	
+	static $_datetime;
+	
     /**     
      * Timezone Correction
      * 
@@ -79,6 +99,15 @@ class VTime extends VObject
      */
     
     private $_dirty = true;
+    
+    /**
+     * PHP Time
+     * 
+     * @var integer $phptime PHP Time
+     * @access public
+     */
+    
+    protected $phptime;
     
     /**
      * Set a correction value
@@ -598,6 +627,74 @@ class VTime extends VObject
     {
         $this->calibrate();
         return $this->_time["microseconds"];     
+    }
+    
+    /**
+     * Get Current Time
+     * 
+     * @return VTime Time
+     * @access public
+     */
+    
+    public static function now() 
+    {
+        $time = new VTime();
+        $time->setPHPTime(time());
+        return $time;
+    }
+        
+    /**
+     * Set String Format
+     * 
+     * @param string $type
+     * @param string $format
+     * @access public
+     */
+    
+    public static function setFormat($type,$format) {
+    	switch($type) {
+    		case "datetime":
+    			self::$_datetime = $format;
+    			break;
+    		default:
+    			break;
+    	}
+    }
+    
+    /**
+     * Is Time Object
+     * 
+     * @return boolean True
+     * @access public
+     */
+    
+    function isTime() 
+    {
+    	return true;
+    }
+    
+    /**
+     * Get Property
+     * 
+     * @param string $name Name
+     * @param mixed $value Default Value
+     * @access public
+     */
+    
+    function &get($name,$default = null) 
+    {
+    	switch($name) {
+    		case "phptime":
+    			$ret = $this->getPHPTime();
+    			break;
+    		case "s_datetime":
+    			$ret = date(self::$_datetime,$this->getPHPTime());
+    			break;	
+    		default:
+    			$ret = parent::get($name,$default);
+    			break;
+    	}
+    	return $ret;
     }
     
     // end class VTime

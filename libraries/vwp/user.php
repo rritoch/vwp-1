@@ -1072,6 +1072,26 @@ class VUser extends VObject
         return (isset($this->meta[$domain][$vname])) ? $this->meta[$domain][$vname] : $default;
     }
     
+    /**
+     * Get Usernames By Email
+     * 
+     * @param string $email
+     * @return array Usernames
+     * @access public
+     */
+    
+    public static function getUsernamesByEmail($email) 
+    {
+    	$credentials = array("email"=>$email);
+        $response = VEvent::dispatch_event("user","Find",$credentials);  
+        $result = $response["result"];
+
+        if (!is_array($result)) {
+            return array();
+        }
+        return $result;
+    }
+    
     /**     
      * Resume logon session (Do not call directly)
      * 
@@ -1138,6 +1158,8 @@ class VUser extends VObject
         
         $widgetId = VEnv::getCmd('widget',null,'route');
         
+        
+        
         // Get URL Settings
         $appId = VEnv::getCmd('app',$appId,'get');  
         $widgetId = VEnv::getCmd('widget',$widgetId,'get');
@@ -1182,7 +1204,7 @@ class VUser extends VObject
             $env['get']['widget'] = $widgetId;
             $env['any']['widget'] = $widgetId;
         }
-
+                
         $result = $this->_shell[0]->execute($cmd,$env,$stdio);             
                         
         if (VWP::isWarning($result)) {

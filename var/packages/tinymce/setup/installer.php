@@ -4,10 +4,10 @@ VWP::RequireLibrary('vwp.archive.installer');
 VWP::RequireLibrary('vwp.sys.registry');
 
 /**
- * Base installer 1.0.1
+ * Base installer 1.0.2
  */
 
-class Tinymce_1_0_1_Base extends VInstaller {
+class Tinymce_1_0_2_Base extends VInstaller {
 
  function process($mode) {
   $this->base_mode = $mode;      
@@ -53,7 +53,7 @@ class Tinymce_1_0_1_Base extends VInstaller {
  function __construct() {
   
   $this->setAppId("tinymce");
-  $this->setBaseVersion(array(1,0,1));   
+  $this->setBaseVersion(array(1,0,2));   
   $this->setName("TinyMCE");          
   $this->setAuthor("Ralph Ritoch");
   $this->setWebsite("VNetPublishing.Com","http://www.vnetpublishing.com");
@@ -62,10 +62,10 @@ class Tinymce_1_0_1_Base extends VInstaller {
 }
 
 /**
- * Version installer 1.0.1
+ * Version installer 1.0.2
  */
 
-class Tinymce_1_0_1_Sub_1_0_1 extends Tinymce_1_0_1_Base {
+class Tinymce_1_0_2_Sub_1_0_2 extends Tinymce_1_0_2_Base {
  
  /**
   * Register Editor
@@ -145,8 +145,8 @@ class Tinymce_1_0_1_Sub_1_0_1 extends Tinymce_1_0_1_Base {
  }
 
  function __construct() {
-   $this->setVersion(array(1,0,1));   
-   $this->setReleaseDate("January 17, 2011");
+   $this->setVersion(array(1,0,2));   
+   $this->setReleaseDate("February 23, 2011");
    parent::__construct();
  }
    
@@ -157,6 +157,6 @@ class Tinymce_1_0_1_Sub_1_0_1 extends Tinymce_1_0_1_Base {
  * Interface class
  */
   
-class Tinymce_1_0_1_Installer  extends Tinymce_1_0_1_Sub_1_0_1 {
+class Tinymce_1_0_2_Installer  extends Tinymce_1_0_2_Sub_1_0_2 {
  // interface class
 }

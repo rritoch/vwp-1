@@ -102,6 +102,15 @@ class VMysqlDatabase extends VDatabase
   
     public $_cerrno = null;
 
+    /**
+     * Database Id
+     * 
+     * @var string $dbid Database Id
+     * @access public
+     */
+        
+    public $_dbid = null;
+    
     const NS_SCHEMA = "http://www.w3.org/2001/XMLSchema";
     const NS_SQLTYPES = "http://standards.vnetpublishing.com/schemas/vwp/2010/12/DBI/sqltypes";
 
@@ -115,7 +124,13 @@ class VMysqlDatabase extends VDatabase
    
     function nameQuote($name) 
     {
-        return '`' . mysql_real_escape_string($name) . '`';
+    	if (is_resource($this->_link)) {
+    	    if (function_exists('mysql_real_escape_string')) {
+                return '`' . mysql_real_escape_string($name,$this->_link) . '`';
+    	    }
+    	    return VWP::raiseWarning('mysql_real_escape_string() not supported!',__CLASS__,null,false);
+    	} 
+    	return VWP::raiseWarning('Not connected to MySQL database',__CLASS__,null,false);    	
     }
 
     /**
@@ -127,8 +142,7 @@ class VMysqlDatabase extends VDatabase
     
     function &createQuery() 
     {
-    	$query = new VMysqlQuery;
-    	$query->bind($this);  
+    	$query = new VMysqlQuery($this);    	  
     	return $query;
     }    
     
@@ -151,7 +165,7 @@ class VMysqlDatabase extends VDatabase
         }
         
         if (is_object($val)) {
-    		if (strtolower(get_class($val)) == 'vtime') {
+    		if (method_exists($val,'isTime') && $val->isTime()) {
     			$val = strftime("%Y-%m-%d %H:%M:%S",$val->getPHPTime());
     		} else {
     			$val = (string)$val;
@@ -208,15 +222,21 @@ class VMysqlDatabase extends VDatabase
    
     function query() 
     {
-        if ($this->_link === false) {
+        if ($this->_link === false) {            
             return $this->raiseError($this->_cerrmsg,$this->_cerrno,false);
-        }  
-  
-        $this->_result = mysql_query($this->_query,$this->_link);
-        if ($this->_result === false) {
-            $this->_cerrmsg = mysql_error();
-            $this->_cerrno = mysql_errno();   
-            return $this->raiseError($this->_cerrmsg,$this->_cerrno,false);
+        }
+          
+        if (function_exists('mysql_query')) {  
+            $this->_result = mysql_query($this->_query,$this->_link);
+            if ($this->_result === false) {            
+                $this->_cerrmsg = mysql_error();
+                $this->_cerrno = mysql_errno();   
+                $result = $this->raiseError($this->_cerrmsg,$this->_cerrno,false);                        
+                return $result;
+            }
+        } else {
+        	$result = $this->raiseError('mysql_query() is not supported!',null,false);
+        	return $result;
         }
         return true;
     }
@@ -321,7 +341,7 @@ class VMysqlDatabase extends VDatabase
     	$tableElement = $tableSchema->getGlobalElementDeclByName($tableId);
     	
     	if (VWP::isWarning($tableElement)) {
-    		$e = VWP::raiseWarning('Table declaration not found!',__CLASS__,null,false);
+    		$e = VWP::raiseWarning('Table ' . $tableId . ' declaration not found!',__CLASS__,null,false);
     		return $e;
     	}  
     	    	
@@ -360,8 +380,9 @@ class VMysqlDatabase extends VDatabase
     	if (VWP::isWarning($sequence)) {
     		return $sequence;
     	}
-    	    	
-    	if ($sequence->getLength() != 1) {
+
+    	$seqLen = $sequence->getLength();
+    	if ($seqLen < 1 || $seqLen > 2) {
     		$e = VWP::raiseWarning('Invalid column declaration pointer!',__CLASS__,null,false);
     		return $e;    		
     	}
@@ -426,16 +447,25 @@ class VMysqlDatabase extends VDatabase
     					} else {
                             $columns[] = $this->nameQuote($colName) . ' VARCHAR('.$size.') ' . $sqlnull . $sqldefault;
     					}
-                        break;    					
+                        break;
+                    case "bit":
+    					$size = $tableSchema->getAttributeDeclMaxLength($colNode);
+    					$size = $size === null ? 1 : $size + 0;
+    					if ($size > 1) {
+    						$columns[] = $this->nameQuote($colName) . ' BIT(' . $size . ') ' . $sqlnull . $sqldefault;
+    					} else {
+                            $columns[] = $this->nameQuote($colName) . ' TINYINT(1) ' . $sqlnull . $sqldefault;
+    					}
+                        break;
+                    case "timestamp":
+                    	$columns[] = $this->nameQuote($colName) . ' TIMESTAMP ' . $sqlnull . $sqldefault . $sqlautoinc;
+                    	break;                    	    					
     				case "smallint":    				
-    				case "bit":
     				case "bit_varying":
     				case "date":
-    				case "time":
-    				case "timestamp":
+    				case "time":    				
     				case "decimal":
-    				case "real":
-    				
+    				case "real":    				
     				case "float":
     				case "character":    				
     				case "national_character":		
@@ -448,6 +478,53 @@ class VMysqlDatabase extends VDatabase
     		} else {
     			$e = VWP::raiseWarning("Column '$colName' has an unknown type",__CLASS__,null,false);
     			return $e;
+    		}
+    	}
+    	
+    	if ($seqLen == 2) {
+    		$indexesDeclPtr = $sequence->getItem(1);    		
+    		$indexesSequence =& $tableSchema->getElementDeclSequence($indexesDeclPtr);
+    		$indexesSeqLen = $indexesSequence->getLength();
+    		
+    		// Loop through indexes!
+    		for($idx=0;$idx < $indexesSeqLen;$idx++) {
+    	        $boundColDeclPtr = $indexesSequence->getItem($idx);
+    	        $tmp = explode('.',$tableSchema->getElementDeclLocalName($boundColDeclPtr));
+                $indexName = array_pop($tmp);    	       
+    	           	       
+    	        $boundColDecls = $tableSchema->getElementDeclAttributes($boundColDeclPtr);
+    	       
+    	        $indexType = null;
+    	        $boundColNames = array();
+                
+                foreach($boundColDecls as $attrib) {
+                    $boundColNames[] = $this->nameQuote($attrib->getAttribute('name'));
+                    if ($indexType === null) {
+                    	$indexType = $attrib->getAttribute('fixed');
+                        if (!in_array($indexType,array('index','unique'))) {
+                    	    $e = VWP::raiseWarning("Unkown index type definition '$indexType' in index '$indexName'",__CLASS__,null,false);
+                    	    return $e;	
+                    	}                    	                    	
+                    } else {
+                    	if ($indexType != $attrib->getAttribute('fixed')) {
+                    	    $e = VWP::raiseWarning("Ambiguous index type definition in index '$indexName'",__CLASS__,null,false);
+                    	    return $e;	
+                    	}
+                    }
+                }
+               
+                // Add index SQL
+               
+                if (count($boundColNames) > 0) {
+                    switch($indexType) {
+                   	    case "index":
+                   	   	   $columns[] = "KEY " . $this->nameQuote($indexName) . "(" . implode(',',$boundColNames) . ")";                    	   	   
+                   	   	   break;
+                   	    case "unique":
+                   	   	    $columns[] = "UNIQUE KEY " . $this->nameQuote($indexName) . "(" . implode(',',$boundColNames) . ")";
+                   	   	    break; 
+                    }	
+                }                   	       
     		}
     	}
     	
@@ -519,33 +596,34 @@ class VMysqlDatabase extends VDatabase
             return;
         }
 
+        $this->_link = false;
         $this->_tables = null;
   
         if (!function_exists('mysql_connect')) {
-            $this->cerrmsg = "mysql_connect() not supported!";    
+            $this->_cerrmsg = "mysql_connect() not supported!";    
             return; 
         }
   
         if (!function_exists('mysql_select_db')) {
-            $this->cerrmsg = "mysql_select_db() not supported!";    
+            $this->_cerrmsg = "mysql_select_db() not supported!";    
             return; 
         }
 
         if (!function_exists('mysql_error')) {
-            $this->cerrmsg = "mysql_error() not supported!";    
+            $this->_cerrmsg = "mysql_error() not supported!";    
             return; 
         }
 
         if (!function_exists('mysql_errno')) {
-            $this->cerrmsg = "mysql_errno() not supported!";    
+            $this->_cerrmsg = "mysql_errno() not supported!";    
             return; 
         }
-  
+
         VWP::noWarn();   
         $this->_link = mysql_connect($this->server, $this->username, $this->password);
         VWP::noWarn(false);
   
-        if ($this->_link === false) {
+        if ($this->_link === false) {            
             $this->_cerrmsg = mysql_error();
             $this->_ccerrno = mysql_errno();    
         }

@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * VWP Content Manager - Default Article Editor Layout
+ * 
+ * @package VWP.Content
+ * @subpackage Layouts.ArticleMgr.HTML
+ * @author Ralph Ritoch <rritoch@gmail.com>
+ * @link http://www.vnetpublishing.com VNetPublishing.Com 
+ * @copyright (c) Ralph Ritoch 2011 - All rights reserved
+ * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License  
+ */
+
+
 
 ?>
 
@@ -84,6 +96,10 @@
   <td class="editor" colspan="2"><?php echo $this->editor; ?></td>
  </tr>
 
+ <tr>
+  <td class="label">File Alias</td>
+  <td><input type="text" size="50" name="article[filename]" value="<?php echo htmlentities($this->article["filename"]); ?>"/></td>
+ </tr>
  <tr>
   <td class="label">Description</td>
   <td><textarea rows="5" cols="40" name="article[description]"><?php echo htmlentities($this->article["description"]); ?></textarea></td>

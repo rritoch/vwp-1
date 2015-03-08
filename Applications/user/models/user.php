@@ -36,7 +36,7 @@ class User_Model_User extends VModel
 	
 	function findUsersByEmail($email) 
 	{
-		return array('admin','guest1','dne');
+		return VUser::getUsernamesByEmail($email);
 	}
 	
 	/**

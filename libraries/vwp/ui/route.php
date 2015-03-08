@@ -4,8 +4,7 @@
  * Virtual Web Platform - SEF URL Routing
  *  
  * This file provides the URL Routing
- *  
- * @todo Implement aliasing of routes to hide application names       
+ *          
  * @package VWP
  * @subpackage Libraries.UI  
  * @author Ralph Ritoch <rritoch@gmail.com>
@@ -77,6 +76,12 @@ class VRoute extends VObject
     static $_widget_routers = array();
  
     /**
+     * Current URI
+     */
+    
+    static $_current_uri;
+    
+    /**
      * Encode route    
      * 
      * Child routers should override this class
@@ -98,17 +103,21 @@ class VRoute extends VObject
         }
   
         $in_encode++;
-     
-        if ((self::$_sef_mode != 'sef') && (self::$_sef_mode != 'rw_sef')) {
-            $in_encode--;
-            return $uri;
-        }
-      
+           
         if (substr($uri,0,9) !== 'index.php') {
+        	self::setCurrentURI($uri);
+        	VNotify::Notify('encode_url','route');        	        	
             $in_encode--;
-            return $uri;
+            return self::getCurrentURI();
         }
-  
+
+        if ((self::$_sef_mode != 'sef') && (self::$_sef_mode != 'rw_sef')) {
+        	self::setCurrentURI(rtrim(VURI::base(),'/') . '/'. $uri);
+        	VNotify::Notify('encode_url','route');
+            $in_encode--;
+            return self::getCurrentURI();
+        }        
+        
         $info = VURI::parse($uri);
         if (!isset($info["query"])) {
             $info["query"] = '';
@@ -118,8 +127,18 @@ class VRoute extends VObject
     
         $rmapp = false;
         $segments = array();
+        
+        $dig = true;
+        if (isset($vars['ref'])) {
+        	if (VWidgetReference::exists($vars['ref'])) {
+        		$dig = false;
+        		$segments = explode('/',$vars['ref']);
+        		array_unshift($segments,'');
+        		$vars = array();
+        	}
+        }
   
-        if (isset($vars['app']) && is_string($vars['app']) && (!empty($vars['app']))) {
+        if ($dig && isset($vars['app']) && is_string($vars['app']) && (!empty($vars['app']))) {
             $app = $vars['app'];
       
             $segments[] = '';
@@ -142,8 +161,9 @@ class VRoute extends VObject
    
             if (isset($widget) && (!empty($widget))) {
                 $widgetRouter =& self::getInstance($app,$widget);
-                if (!VWP::isWarning($widgetRouter)) {
-                    $widget_segs = $appRouter->encode($vars);
+                
+                if (!VWP::isWarning($widgetRouter)) {                	
+                    $widget_segs = $widgetRouter->encode($vars);
                     foreach($widget_segs as $seg) {
                         $segments[] = $seg;
                     }
@@ -171,9 +191,22 @@ class VRoute extends VObject
         if (strlen($query) > 0) {
             $query_prefix = '?';
         }
-  
+        
+        if (self::$_sef_mode == 'rw_sef') {
+            $script_name = '';
+        } else {
+            $script_name = VRequest::getScriptName();        
+            if ($script_name === null) {
+                $script_name = '/index.php';
+            } else {
+                $p = explode('/',$script_name);
+                $script_name = '/'.array_pop($p);
+            }
+        }
+        self::setCurrentURI(rtrim(strtolower(VURI::base()),'/') .$script_name . $path_extra.$query_prefix.$query);
+        VNotify::Notify('encode_url','route');          
         $in_encode--;        
-        return rtrim(strtolower(VURI::base()),'/') .'/index.php' . $path_extra.$query_prefix.$query;    
+        return self::getCurrentURI();     
     }  
  
     /**
@@ -186,11 +219,14 @@ class VRoute extends VObject
            
     function decode(&$segments) 
     {
+    	    	
         $vars = array();
         if (count($segments) < 2) {
             return $vars;
         }
   
+        
+        
         //This one better be empty!!!
         array_shift($segments);
    
@@ -223,17 +259,56 @@ class VRoute extends VObject
                     $widgetRouter =& self::getInstance($app,$vars["widget"]);
                     if (!VWP::isWarning($widgetRouter)) {
                         $widgetVars = $widgetRouter->decode($segments);
-                        $vars = array_merge($vars,$appVars);
+                        $vars = array_merge($vars,$widgetVars);
                     }    
                 }    
             }
    
             return $vars;
+        } else {
+        	array_unshift($segments,$root);
+        	
+        	$refId = implode('/',$segments);
+        	if (VWidgetReference::exists($refId)) {
+        	    $ob =& VWidgetReference::load($refId);
+        	    if (!VWP::isWarning($ob)) {
+        	    	$widgetId = $ob->widgetId;
+        	    	$parts = explode('.',$widgetId);
+        	    	$vars['app'] = array_shift($parts);
+        	    	$vars['widget'] = implode('.',$parts);
+        	    	$vars['ref'] = $refId;
+        	    }	
+        	}
         }
   
         return $vars; 
     }
 
+    /**
+     * Unmap URL
+     * 
+     * @param string $mappedUrl
+     * @param array $vars
+     * @return string Unmapped URL
+     */
+    
+    public static function unmapUrl($mappedUrl,$vars) 
+    {
+        $mappedUrl = (string)$mappedUrl;
+        $result = preg_match_all('|\#\((.*?)\)|',$mappedUrl,$matches);
+        
+        if ($result) {
+        	$len = count($matches[0]);
+        	for($i=0;$i<$len;$i++) {
+        		$val = isset($vars[$matches[1][$i]]) ? $vars[$matches[1][$i]] : '';
+        		$mappedUrl = str_replace($matches[0][$i],urlencode($val),$mappedUrl);        		
+        	}
+        }
+        
+        $mappedUrl = self::getInstance()->encode($mappedUrl);
+        return $mappedUrl;        	    	
+    }
+    
     /**
      * Get router
      * 
@@ -282,17 +357,19 @@ class VRoute extends VObject
             $wsegs = explode('.',$widget);
             $widgetPath = 'widgets'.DS.implode(DS.'widgets'.DS,$wsegs);         
             $routefile = VPATH_ROOT.DS.'Applications'.DS.$app.DS.$widgetPath.DS.'router.php';
-   
+                           
             $w = ucfirst(array_pop($wsegs));   
             $parent = ucfirst($app);
             foreach($wsegs as $p) {
-                $parent .= ucfirst($p);
+                $parent .= '_'.ucfirst($p);
             }
    
-            $routeclass = $parent.'VRoute'.$w;
+            $routeclass = $parent.'_VRoute_'.$w;
+                        
             if (self::$_vfile->exists($routefile)) {
+            	
                 require_once($routefile);
-                if (class_exists($routeclass)) {
+                if (class_exists($routeclass)) {                	
                     self::$_widget_routers[$app][$widget] = new $routeclass;         
                 } else {
                     self::$_widget_routers[$app][$widget] = VWP::raiseWarning("Router $routeclass not found!",'VRoute',ERROR_CLASSNOTFOUND,false);    
@@ -305,6 +382,15 @@ class VRoute extends VObject
         return self::$_widget_routers[$app][$widget];  
     }
  
+    public static function getCurrentURI() {
+    	return self::$_current_uri;
+    }
+    
+    public static function setCurrentURI($uri) 
+    {
+    	self::$_current_uri = is_null($uri) ? null : (string)$uri;
+    }
+    
     /**
      * Initialize Router
      * 

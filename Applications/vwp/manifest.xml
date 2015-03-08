@@ -8,17 +8,17 @@
  <author_link>http://www.vnetpublishing.com</author_link>
  <copyright>Copyright Ralph Ritoch 2010 - ALL RIGHTS RESERVED</copyright>
  <license>http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt</license>
- <version>1.0.1</version>
+ <version>1.0.2</version>
  <version_start_date></version_start_date>
  <version_release_date /> 
  <install>
   <extract>local</extract>
  </install>
- <folder name="setup" version="1.0.1">
+ <folder name="setup" version="1.0.2">
   <file>/installer.php</file>
   <file>/index.html</file>
  </folder>
- <folder name="base" version="1.0.1">
+ <folder name="base" version="1.0.2">
   <file>/manifest.xml</file>
   <file>/vwp.php</file>
   <file>/preinstall.php</file>
@@ -47,6 +47,7 @@
   <file>/widgets/validate/layouts/html/default.php</file>
   <file>/widgets/validate/validate.php</file>    
   <file>/root/index.php</file>
+  <file>/root/htaccess.txt</file>
   <file>/root/vwp_types.php</file>
   <file>/root/vwp_config.php</file>
   <file>/root/languages/en.php</file>
@@ -187,7 +188,7 @@
   <file>/widgets/validate/layouts/html/index.html</file>
   <file>/widgets/validate/layouts/index.html</file>        
  </folder>
- <folder name="library" version="1.0.1">
+ <folder name="library" version="1.0.2">
   <file>/application.php</file>
   <file>/stdio.php</file>   
   <file>/uri.php</file>
@@ -204,6 +205,10 @@
   <file>/dbi/dbi.php</file>  
   <file>/dbi/paging.php</file>
   <file>/dbi/filter.php</file>
+  <file>/dbi/query.php</file>
+  <file>/dbi/types.php</file>
+  <file>/dbi/types/multifieldidentity.php</file>
+  <file>/dbi/types/singlefieldidentity.php</file>  
   <file>/dbi/drivers/mssql.php</file>
   <file>/dbi/drivers/mysql.php</file>
   <file>/dbi/drivers/mssql/row.php</file>
@@ -264,6 +269,7 @@
   <file>/net/dre/service.php</file>
   <file>/net/dre/binding.php</file>
   <file>/net/dre/bindings/soap.php</file>
+  <file>/net/dre/handlers/http.php</file>
   <file>/net/dre/translators/soap.php</file>
   <file>/net/dre/bindings/soap/serverclone.php</file>
   <file>/net/dre/translators/soap/mapitem.php</file>
@@ -276,6 +282,7 @@
   <file>/ui/route.php</file>
   <file>/ui/widget.php</file>
   <file>/ui/frame.php</file>
+  <file>/ui/ref.php</file>
   <file>/ui/listener.php</file>
   <file>/ui/widget/params.php</file>
   <file>/ui/frameitem.php</file>
@@ -289,6 +296,11 @@
   <file>/server/client.php</file>
   <file>/server/headers.php</file>
   <file>/server/post.php</file>
+  <file>/service/dataobject.php</file>
+  <file>/service/dispatcher.php</file>
+  <file>/service/handler.php</file>
+  <file>/service/reply.php</file>
+  <file>/service/resource.php</file>    
   <file>/sys/hibernate.php</file>
   <file>/sys/kernel.php</file>
   <file>/sys/time.php</file>
@@ -301,6 +313,7 @@
   <file>/sys/callback.php</file>
   <file>/sys/action.php</file>
   <file>/sys/loop.php</file>
+  <file>/sys/search.php</file>  
   <file>/sys/registry/classes_root.php</file>
   <file>/sys/registry/current_config.php</file>
   <file>/sys/registry/current_user.php</file>
@@ -308,13 +321,14 @@
   <file>/sys/registry/local_machine.php</file>
   <file>/sys/registry/users.php</file>  
   <file>/sys/types/shell.php</file>
+  <file>/sys/tickets.php</file>
   <file>/xml/schema.php</file>
   <file>/xml/schema/datatype.php</file>
   <file>/xml/schema/sequence.php</file>
   <file>/xml/xmlhelper.php</file>
   <file>/xml/xmlhttpserializer.php</file>
   <file>/xml/xsl.php</file>
-  <file>/sys/tickets.php</file>
+  <file>/xml/wsdl/message.php</file>    
   <file>/xml/wsdl.php</file>
   <file>/dom/domimplementationlist.php</file>
   <file>/dom/domimplementationregistry.php</file>
@@ -350,6 +364,18 @@
   <file>/ui/menuitem/index.html</file>
   <file>/ui/widget/index.html</file>
   <file>/xml/index.html</file>
-  <file>/xml/schema/index.html</file>                 
+  <file>/xml/schema/index.html</file>  
+  <file>/dbi/queryhelper.php</file>
+  <file>/dbi/types/query/datasources.php</file>
+  <file>/dbi/types/query/fieldlist.php</file>
+  <file>/dbi/types/query/filter.php</file>
+  <file>/dbi/types/query/filterlist.php</file>
+  <file>/dbi/types/query/labellist.php</file>
+  <file>/dbi/types/query/ratio.php</file>
+  <file>/dbi/types/query/relationshipgrouplist.php</file>
+  <file>/dbi/types/query/summaryoptions.php</file>
+  <file>/dbi/types/query/tables.php</file>
+  <file>/dbi/types/query/valuelist.php</file>
+  <file>/dom/domhelper.php</file>                   
  </folder>
 </application_manifest>

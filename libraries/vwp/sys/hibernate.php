@@ -90,7 +90,7 @@ class VHibernateDriver extends VObject
         
         VEvent::dispatch_event("hibernate","load");
         
-        VNotify::Notify('wake',__CLASS__);
+        VNotify::Notify('wake','hibernate');
         
         return self::$_signature;        
     }
@@ -154,7 +154,7 @@ class VHibernateDriver extends VObject
     
         VEvent::dispatch_event("hibernate","unload");
         
-        VNotify::Notify('sleep',__CLASS__);
+        VNotify::Notify('sleep','hibernate');
                
         self::$_signature = 'A';
         

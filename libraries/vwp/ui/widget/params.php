@@ -20,7 +20,6 @@
 
 VWP::RequireLibrary('vwp.filesystem');
 
-
 /**
  * Widget Parameters  
  * 
@@ -94,32 +93,24 @@ class VWidgetParams extends VObject
      
     function loadRef($ref) 
     {
-        $doc = new DomDocument;
-        $filename = VWP::getVarPath('vwp').DS.'ref'.DS.$ref.'.xml';
-        $vfile =& v()->filesystem()->file();
-  
-        if (!$vfile->exists($filename)) {  
-            return VWP::raiseWarning("No resource defined.",__CLASS__,null,false);  
-        }
-        $result = $vfile->read($filename);
-        if (VWP::isWarning($result)) {
-            return $result;
-        }
-  
-        VWP::noWarn();
-        $result = @$doc->loadXML($result);
-        VWP::noWarn(false);
-        if (!$result) {
-            return VWP::raiseWarning("Invalid refrence document.",get_class($this),null,false);
-        }
-  
-        $vlist = $doc->documentElement->childNodes;
-  
-        for($i = 0; $i < $vlist->length; $i++) {
-            $v = $vlist->item($i);   
-            $this->set($v->nodeName,$v->nodeValue);   
-        }      
-        return true;
+    	if (!class_exists('VWidgetReference')) {
+    		VWP::RequireLibrary('vwp.ui.ref');
+    	}
+    	
+    	$paths = $this->_paths;
+    	$r =& VWidgetReference::load($ref);
+    	if (VWP::isWarning($r)) {
+    		return $r;
+    	}
+    	
+    	if (isset($r->params)) {
+    	    $this->bind($r->params);
+    	}
+    	
+    	$r->setParams($this);
+
+    	$this->_paths = $paths;
+    	return true;
     }
   
     /**
@@ -134,33 +125,17 @@ class VWidgetParams extends VObject
     {
  
         VWP::RequireLibrary('vwp.documents.xml');
-  
-        // Setup File
-  
-        $filename = VWP::getVarPath('vwp').DS.'ref'.DS.$ref.'.xml';
-        $vfile =& v()->filesystem()->file();
-        $vfolder =& v()->filesystem()->folder();
-  
-        if (!$vfolder->exists(dirname($filename))) {
-            $vfolder->create(dirname($filename));
+        
+        if (VWidgetReference::exists($ref)) {
+            $r =& VWidgetReference::load($ref);
+            if (VWP::isWarning($r)) {
+        	    return $r;
+            }
+        } else {
+        	$r = VWidgetReference::create($ref);
         } 
-
-        // Generate Document  
-        $doc = new DomDocument;
-        $data = '<' . '?xml version="1.0" encoding="utf-8" ?' . '>' . "\n" . "<ref></ref>";  
-        $doc->loadXML($data);
-        $vlist = $this->getProperties();
-        foreach($vlist as $key=>$val) {
-            if ($key !== "#text") {    
-                $v = $doc->createElement($key,XMLDocument::xmlentities($val));       
-                $doc->documentElement->appendChild($doc->createTextNode("\n "));
-                $doc->documentElement->appendChild($v);
-            }   
-        }  
-        $doc->documentElement->appendChild($doc->createTextNode("\n "));
-        $data = $doc->saveXML();
-        $result = $vfile->write($filename,$data);
-        return true;
+        $r->setParams($this);
+        return $r->save();        
     }
  
     /**
@@ -231,7 +206,6 @@ class VWidgetParams extends VObject
     function &_createModel( $name, $prefix = '', $config = array()) 
     {
         $result = null;
-
         // Clean the model name
         $modelName	 = preg_replace( '/[^A-Z0-9_\\.]/i', '', $name );
         $classPrefix = preg_replace( '/[^A-Z0-9_]/i', '', $prefix );
@@ -341,6 +315,41 @@ class VWidgetParams extends VObject
         $this->_paths[$type][] = $path;
     }
  
+    /**
+     * Load Params Object
+     * 
+     * @param string $widgetId
+     * @access public
+     */
+    
+    public static function loadParams($widgetId) 
+    {
+    	$parts = explode('.',strtolower($widgetId));
+    	$appId = array_shift($parts);
+    	$app_path = VPATH_BASE.DS.'Applications'.DS.$appId;    	
+    	$filename = $app_path.DS.'widgets'.implode(DS.'widgets'.DS,$parts).DS.'params.php';    	
+    	$classExt = array_pop($parts);    	
+    	array_unshift($parts,$appId);
+    	$classPrefix = implode('_',$parts);
+    	$className = $classPrefix.'_WidgetParams_'.$classExt;
+    	
+    	if (!class_exists($className)) {
+    	    $f =& v()->filesystem()->file();
+    	    if ($f->exists($filename)) {
+    	    	require_once($filename);
+    	    }
+    	}
+    	
+    	if (class_exists($className)) {
+    		$params = new $className;
+    	} else {
+    		$params = new VWidgetParams;
+    	}
+    	
+    	return $params;
+    }
+    
+    
     /**
      * Class constructor
      * 

@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * VWP Content Manager - Default Article Manager Layout
+ * 
+ * @package VWP.Content
+ * @subpackage Layouts.ArticleMgr.HTML
+ * @author Ralph Ritoch <rritoch@gmail.com>
+ * @link http://www.vnetpublishing.com VNetPublishing.Com 
+ * @copyright (c) Ralph Ritoch 2011 - All rights reserved
+ * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License  
+ */
+
 ?>
 
 <script type="text/javascript"><!--
@@ -46,10 +57,10 @@
 <table class="itable">
 <thead>
  <tr class="title">
-  <th colspan="4">Content Articles</th>
+  <th colspan="5">Content Articles</th>
  </tr>
  <tr class="toolbar">
-  <th colspan="4">
+  <th colspan="5">
    <table class="itable_toolbar">
     <thead>
      <tr>
@@ -64,7 +75,8 @@
   <th><input type="checkbox" name="ckall" onClick="javascript:tbCheckAll('articles','id[');" /></th>
   <th>ID</th>
   <th>Title</th>
-  <th>Category</th>  
+  <th>Category</th>
+  <th>URL</th>  
  </tr>
 </thead>
 <tbody>
@@ -77,6 +89,7 @@
   <td><?php echo htmlentities($article["id"]); ?></td>
   <td><?php echo htmlentities($article["title"]); ?></td>
   <td><?php if (empty($article["category"])) { echo "(none)"; } else echo isset($this->categories[$article["category"]]) ? htmlentities($this->categories[$article["category"]]) : "(Unknown)"; ?></td>
+  <td><a href="<?php echo htmlentities($article['url']); ?>"><?php echo htmlentities($article['url']); ?></a></td>
  </tr>
 <?php 
  }

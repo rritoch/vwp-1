@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * VWP Content Manager - Default Category Manager Layout
+ * 
+ * @package VWP.Content
+ * @subpackage Layouts.CatMgr.HTML
+ * @author Ralph Ritoch <rritoch@gmail.com>
+ * @link http://www.vnetpublishing.com VNetPublishing.Com 
+ * @copyright (c) Ralph Ritoch 2011 - All rights reserved
+ * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License  
+ */
+
 ?>
 
 <script type="text/javascript"><!--
@@ -46,10 +57,10 @@
 <table class="itable">
 <thead>
  <tr class="title">
-  <th colspan="4">Content Categories</th>
+  <th colspan="5">Content Categories</th>
  </tr>
  <tr class="toolbar">
-  <th colspan="4">
+  <th colspan="5">
    <table class="itable_toolbar">
     <thead>
      <tr>
@@ -64,7 +75,8 @@
   <th><input type="checkbox" name="ckall" onClick="javascript:tbCheckAll('categories','id[');" /></th>
   <th>ID</th>
   <th>Name</th>
-  <th>Parent</th>  
+  <th>Parent</th>
+  <th>URL</th>  
  </tr>
 </thead>
 <tbody>
@@ -77,13 +89,14 @@
   <td><?php echo htmlentities($cat["id"]); ?></td>
   <td><?php echo htmlentities($cat["name"]); ?></td>
   <td><?php echo empty($cat["parent"]) ? "(none)" : htmlentities($cat["parent"] . " : " . $cat["_parent_name"]); ?></td>
+  <td><a href="<?php echo htmlentities($cat['url']); ?>"><?php echo htmlentities($cat['url']); ?></a></td>
  </tr>
 <?php 
  }
 
 } else { ?>
 <tr>
- <td colspan="4">No Categories</td>
+ <td colspan="5">No Categories</td>
 </tr>
 <?php } ?>
 </tbody>

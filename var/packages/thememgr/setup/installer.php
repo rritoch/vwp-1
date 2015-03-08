@@ -4,10 +4,10 @@ VWP::RequireLibrary('vwp.archive.installer');
 VWP::RequireLibrary('vwp.sys.registry');
 
 /**
- * Base installer 1.0.0
+ * Base installer 1.0.2
  */
 
-class Thememgr_1_0_1_Base extends VInstaller 
+class Thememgr_1_0_2_Base extends VInstaller 
 {
 
     function process($mode) 
@@ -56,112 +56,22 @@ class Thememgr_1_0_1_Base extends VInstaller
     {
   
         $this->setAppId("thememgr");
-        $this->setBaseVersion(array(1,0,1));   
+        $this->setBaseVersion(array(1,0,2));   
         $this->setName("ThemeMGR");          
         $this->setAuthor("Ralph Ritoch");
         $this->setWebsite("VNetPublishing.Com","http://www.vnetpublishing.com");
         parent::__construct();
     }
 
-    // end class Thememgr_1_0_1_Base
+    // end class Thememgr_1_0_2_Base
 }
 
-/**
- * Version installer 1.0.0
- */
-
-class Thememgr_1_0_1_Sub_1_0_0 extends Thememgr_1_0_1_Base 
-{
- 
-     
-    /**
-     * Version install method
-     * 
-     * @access public      
-     */     
-
-    function version_install() 
-    {
-        
-        $tasks = array('initDB',
-                       'copyfiles',
-                       'installEvents',
-                       'installMenuLinks');
-     
-        $corelinks = array();
-  
-        $corelinks[] = array(
-             "type"=>"applink",
-             "text"=>'Theme Manager',
-             "widget"=>'thememgr'  
-         );
-
- 
-        $this->setMenuLinks('core_admin',$corelinks);
-  
-        //$base = dirname(dirname(__FILE__)).DS.'base'.DS.'events';
-  
-        $events = array();
-  
-        $this->setEvents($events);
-  
-        $result = $this->runAll($tasks);
-     
-        $this->finish($result);
-        return $result;  
-    }
-
-    /**
-     * Version uninstall method
-     * 
-     * @access public      
-     */     
-
-    function version_uninstall() 
-    {
-        
-        $tasks = array('uninitDB',
-                       'deletefiles',
-                       'uninstallEvents',
-                       'uninstallMenuLinks');
-  
-        $corelinks = array();
-  
-        $corelinks[] = array(
-          "type"=>"applink",
-          "text"=>'Theme Manager',
-          "widget"=>'thememgr'  
-        );
- 
-        $this->setMenuLinks('core_admin',$corelinks);
-  
-        //$base = dirname(dirname(__FILE__)).DS.'base'.DS.'events';
-  
-        $events = array();
-  
-        $this->setEvents($events);
-  
-        $result = $this->runAll($tasks);
-     
-        $this->finish($result);
-        return $result;  
-    }
- 
-    function __construct() 
-    {
-        $this->setVersion(array(1,0,0));   
-        $this->setReleaseDate("September 22, 2010");
-        parent::__construct();
-    }
-    
-    // end class  Thememgr_1_0_1_Sub_1_0_0
-} 
 
 /**
- * Version installer 1.0.1
+ * Version installer 1.0.2
  */
 
-class Thememgr_1_0_1_Sub_1_0_1 extends Thememgr_1_0_1_Base 
+class Thememgr_1_0_2_Sub_1_0_2 extends Thememgr_1_0_2_Base 
 {
  
      
@@ -241,21 +151,21 @@ class Thememgr_1_0_1_Sub_1_0_1 extends Thememgr_1_0_1_Base
     function __construct() 
     {
         // register previous version
-        $o1 = new Thememgr_1_0_1_Sub_1_0_0;
+        //$o1 = new Thememgr_1_0_1_Sub_1_0_0;
             	
-        $this->setVersion(array(1,0,1));   
-        $this->setReleaseDate("December 31, 2010");
+        $this->setVersion(array(1,0,2));   
+        $this->setReleaseDate("March 6, 2011");
         parent::__construct();
     }
     
-    // end class  Thememgr_1_0_1_Sub_1_0_0
+    // end class  Thememgr_1_0_2_Sub_1_0_2
 } 
 
 /**
  * Interface class
  */
   
-class Thememgr_1_0_1_Installer  extends Thememgr_1_0_1_Sub_1_0_1 
+class Thememgr_1_0_2_Installer  extends Thememgr_1_0_2_Sub_1_0_2 
 {
     // interface class
 }

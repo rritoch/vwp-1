@@ -7,22 +7,26 @@
  <author>Ralph Ritoch</author>
  <author_link>http://www.vnetpublishing.com</author_link>
  <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
- <version>1.0.1</version>
+ <version>1.0.2</version>
  <version_start_date></version_start_date>
  <version_release_date></version_release_date> 
- <folder name="setup" version="1.0.1">
+ <folder name="setup" version="1.0.2">
   <file>/installer.php</file>
   <file>/index.html</file>
  </folder>
- <folder name="base" version="1.0.1">
+ <folder name="base" version="1.0.2">
   <file>/content.php</file>
-  <file>/manifest.xml</file>
+  <file>/router.php</file>
+  <file>/manifest.xml</file>  
   <file>/models/admin.php</file>
   <file>/models/article.php</file>
   <file>/models/articles.php</file>
   <file>/models/categories.php</file>
   <file>/models/category.php</file>
-  <file>/models/content.php</file>
+  <file>/models/images.php</file>    
+  <file>/models/tables/content_articles.xsd</file>
+  <file>/models/tables/content_categories.xsd</file>
+  <file>/events/search/content.php</file>    
   <file>/widgets/admin/admin.php</file>
   <file>/widgets/admin/layouts/html/default.php</file>
   <file>/widgets/article/article.php</file>
@@ -62,6 +66,13 @@
   <file>/widgets/home/index.html</file>
   <file>/widgets/home/layouts/html/index.html</file>
   <file>/widgets/home/layouts/index.html</file>
-  <file>/widgets/index.html</file>    
+  <file>/widgets/article/router.php</file>
+  <file>/widgets/category/router.php</file>  
+  <file>/widgets/index.html</file>  
+  <file>/widgets/images/images.php</file>
+  <file>/widgets/images/layouts/xml/default.php</file>         
+ </folder>
+ <folder name="library" version="1.0.2">
+  <file>/search.php</file>
  </folder>
 </application_manifest>

@@ -105,7 +105,7 @@ class VApplication extends VWidget
      * @access private          
      */
   
-    private function _setpiID($piID) 
+    protected function _setpiID($piID) 
     {
         $this->_nosave_piID = $piID;
     }
@@ -117,7 +117,7 @@ class VApplication extends VWidget
      * @access public              
      */
               
-    private function getpiID() 
+    protected function getpiID() 
     {
         return $this->_nosave_piID; 
     }    

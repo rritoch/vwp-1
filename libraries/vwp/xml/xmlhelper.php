@@ -8,7 +8,7 @@
  * @package VWP
  * @subpackage Libraries.XML  
  * @author Ralph Ritoch <rritoch@gmail.com>
- * @copyright (c) Ralph Ritoch - All Rights Reserved
+ * @copyright (c) Ralph Ritoch 2011 - All Rights Reserved
  * @link http://www.vnetpublishing.com VNetPublishing.Com
  * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License  
  */
@@ -34,7 +34,7 @@ VNet::RequireClient('http');
  * @package VWP
  * @subpackage Libraries.XML  
  * @author Ralph Ritoch <rritoch@gmail.com>
- * @copyright (c) Ralph Ritoch - All Rights Reserved
+ * @copyright (c) Ralph Ritoch 2011 - All Rights Reserved
  * @link http://www.vnetpublishing.com VNetPublishing.Com
  * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License  
  */
@@ -51,7 +51,8 @@ class VXMLHelper extends VObject
 	 * @access public
 	 */
 	
-    public static function sameNamespace($ns1,$ns2) {    
+    public static function sameNamespace($ns1,$ns2) 
+    {    
         return rtrim($ns1,'/') == rtrim($ns2,'/');
     }
 
@@ -62,7 +63,8 @@ class VXMLHelper extends VObject
      * @access public
      */
     
-    public static function getPrefixList($node) {
+    public static function getPrefixList($node) 
+    {
         $prefixList = array();
         
         $tagName = $node->nodeName;
@@ -101,12 +103,13 @@ class VXMLHelper extends VObject
     /**
      * Encode string to XML data
      * 
-     *  @param string $txt Source text
+     * @param string $txt Source text
      * @return string Encoded text
      * @access public
      */
               
-    public static function xmlentities($txt) {
+    public static function xmlentities($txt) 
+    {
        $str = $txt;
        $str = str_replace("&","&amp;",$str);
        $str = str_replace("<","&lt;",$str);

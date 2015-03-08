@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * VWP Content Manager - Default Category Editor Layout
+ * 
+ * @package VWP.Content
+ * @subpackage Layouts.CatMgr.HTML
+ * @author Ralph Ritoch <rritoch@gmail.com>
+ * @link http://www.vnetpublishing.com VNetPublishing.Com 
+ * @copyright (c) Ralph Ritoch 2011 - All rights reserved
+ * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License  
+ */
 
 ?>
 
@@ -74,6 +84,18 @@
   <td class="label">Name</td>
   <td><input type="text" size="50" name="cat[name]" value="<?php echo htmlentities($this->category["name"]); ?>"/></td>
  </tr>
+ <tr>
+  <td class="label">File Alias</td>
+  <td><input type="text" size="50" name="cat[filename]" value="<?php echo htmlentities($this->category["filename"]); ?>"/></td>
+ </tr>
+ <tr>
+  <td class="label">Description</td>
+  <td><input type="text" size="50" name="cat[description]" value="<?php echo htmlentities($this->category["keywords"]); ?>"/></td>
+ </tr>
+ <tr>
+  <td class="label">Keywords</td>
+  <td><input type="text" size="50" name="cat[keywords]" value="<?php echo htmlentities($this->category["keywords"]); ?>"/></td>
+ </tr>  
  <tr>
   <td class="label">Parent</td>
   <td><select name="cat[parent]"><?php if (empty($this->category["parent"])) { ?><option value="" selected="selected"><?php } else { ?><option value="" ><?php } ?>(none)</option><?php

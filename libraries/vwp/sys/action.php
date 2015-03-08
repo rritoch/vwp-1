@@ -36,12 +36,7 @@ class VAction extends VObject
        
     protected $_id = null;
 
-    /**
-     * @var mixed $callback Callback Action
-     * @access public  
-     */
 
-    public $callback;
 
     /**
      * @var string $event Event
@@ -58,6 +53,13 @@ class VAction extends VObject
     public $eclass;
 
     /**
+     * @var mixed $callback Callback Action
+     * @access public  
+     */
+
+    public $callback;    
+    
+    /**
      * Do Action
      * 
      * @param string $event Event
@@ -66,11 +68,12 @@ class VAction extends VObject
      * @access public
      */
   
-    function doAction($event,$class = null) 
+    function doAction($params = array()) 
     {
+    	
         if ((is_array($this->callback)) && (is_object($this->callback[0]))) {
             $fn = $this->callback[1];     
-            $this->callback[0]->$fn($event,$class);
+            $this->callback[0]->$fn($this->event,$this->eclass,$params);
             return true;
         }
   
@@ -78,7 +81,7 @@ class VAction extends VObject
             return false;
         }
   
-        call_user_func($$this->callback,$event,$class);
+        call_user_func($$this->callback,$event,$class,$params);
     
         return true;
     }

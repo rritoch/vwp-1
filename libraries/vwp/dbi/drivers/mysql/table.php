@@ -50,6 +50,8 @@ VWP::RequireLibrary('vwp.dbi.filter');
 class VMysqlTable extends VMysqlDatabase 
 {
  
+	public $maxcachesize = 1024;
+	
     /**
      * @var object Paging
      * @access public
@@ -76,7 +78,7 @@ class VMysqlTable extends VMysqlDatabase
      * @access public
      */
        
-    var $rows = array();
+    protected $rows = array();
  
     /**
      * @var string $primary_key Primary key column
@@ -131,14 +133,10 @@ class VMysqlTable extends VMysqlDatabase
   
         // Validate Request
   
-        if (empty($this->primary_key)) 
-        {
-            $this->loadColumns();
-            if (empty($this->primary_key)) {    
-                return VWP::raiseWarning('No Primary Key!',get_class($this),null,false);
-            }
+        if (!isset($this->columns)) {
+        	$this->loadColumns();
         }
-  
+
         // Short Circuit
   
         if ($maxresults !== null) {
@@ -150,7 +148,12 @@ class VMysqlTable extends VMysqlDatabase
   
         // Set Pointer
   
-        $sql_key = $this->nameQuote($this->primary_key);
+        if (isset($this->primary_key)) {
+        	$sql_key = $this->nameQuote($this->primary_key);        	
+        } else {
+            $sql_key = "*";
+        }
+        
         $sql_table = $this->nameQuote($this->tableName);
   
         // Set Filter
@@ -161,6 +164,22 @@ class VMysqlTable extends VMysqlDatabase
    
             if (($t == '=') && ($val === null)) {
                 $sql = $this->nameQuote($key) . " IS NULL";
+                
+            } elseif ($t == "IGLOB") {
+            	$val = str_replace("\\\\","\\",$val);            	
+            	$val = str_replace("\\*",'*',$val);
+            	$val = str_replace("\\?",'?',$val);
+            	$val = str_replace("*","%",$val);
+            	$val = str_replace("?","_",$val);
+            	$sql = $this->nameQuote($key) . " LIKE " . $this->quote($val);
+            	             	            	
+            } elseif ($t == "NOT IGLOB") {
+            	$val = str_replace("\\\\","\\",$val);            	
+            	$val = str_replace("\\*",'*',$val);
+            	$val = str_replace("\\?",'?',$val);
+            	$val = str_replace("*","%",$val);
+            	$val = str_replace("?","_",$val);
+            	$sql = $this->nameQuote($key) . " NOT LIKE " . $this->quote($val);            	            		
             } else {
                 $sql = $this->nameQuote($key) . " " . $t . " " . $this->quote($val);
             }
@@ -176,11 +195,11 @@ class VMysqlTable extends VMysqlDatabase
   
         $order_parts = array();
         foreach($ordering as $field=>$dir) {
-               if ($dir < 0) {
-                   array_push($order_parts, $this->nameQuote($field) . ' DESC');
-               } else {
-                   array_push($order_parts, $this->nameQuote($field) . ' ASC');
-               }
+            if ($dir < 0) {
+                array_push($order_parts, $this->nameQuote($field) . ' DESC');
+            } else {
+                array_push($order_parts, $this->nameQuote($field) . ' ASC');
+            }
         }
   
         $sql_order = '';
@@ -206,7 +225,9 @@ class VMysqlTable extends VMysqlDatabase
                  .$sql_where
                  .$sql_order
                  .$sql_limit;  
-          
+
+        //VWP::raiseWarning($query);
+        
         $this->setQuery($query);
   
         $r = $this->query();
@@ -216,12 +237,36 @@ class VMysqlTable extends VMysqlDatabase
   
         $result = array();
         $r = $this->loadAssocList();
-        foreach($r as $data) {
-            if ($offset > 0) {
-                $offset--;
-            } else {
-                array_push($result,$data[$this->primary_key]);
+        
+        if (isset($this->primary_key)) {
+            foreach($r as $data) {
+                if ($offset > 0) {
+                    $offset--;
+                } else {
+                    array_push($result,$data[$this->primary_key]);
+                }
             }
+        } else {
+        	
+            $coltypes = array();
+            foreach($this->columns as $cinfo) {
+            	$coltypes[$cinfo['name']] = $cinfo['_Type'];
+            }        	
+        	
+            foreach($r as $data) {
+            	foreach($data as $key=>$val) {
+            		if ($coltypes[$key] == "timestamp") {
+            			$t = strtotime($val);
+            			$data[$key] = new VTime;
+            			$data[$key]->setPHPTime($t);
+            		}
+            	}
+                if ($offset > 0) {
+                    $offset--;
+                } else {
+                    array_push($result,$data);
+                }
+            }        	
         }
         return $result;    
     }
@@ -276,21 +321,37 @@ class VMysqlTable extends VMysqlDatabase
     } 
  
     /**
-     * Reserved for future use
-     *   
-     * types:
-     * boolean   : (allownull)
-     * int       : (size,signed,allownull)
-     * string    : (size,allownull)
-     * timestamp : (auto,allownull)
-     * datetime  : (date,time)
-     * float     : (allownull,size)
-     * decimal   : (allownull,size)
-     * native    : Not createable!
+     * Check if table has column
+     * 
+     * @param string $name Column name
+     * @return boolean True if column exists
+     */
+    
+    function hasColumn($name) 
+    {
+        if (empty($this->columns)) $this->loadColumns();
+        $cols = $this->columns;
+        foreach($cols as $c) {
+        	if ($c['name'] == $name) {
+        		return true;
+        	}
+        }
+        return false;	
+    }
+    
+    /**
+     * Insert a column
      *
-     * @todo Database insert Column support
+     * <pre>
+     * 
+     *  Options:
+     *  (boolean) required - False if NULL allowed
+     *  (integer) size - Size
+     *  
+     * </pre> 
+     * 
      * @param string $columnName Column Name
-     * @param string $type Data type
+     * @param string $type ANSI-SQL Data type
      * @param array $options column options
      * @param string $before Column name to insert before 
      * @access private
@@ -299,8 +360,125 @@ class VMysqlTable extends VMysqlDatabase
 
     function insertColumn($columnName,$type,$options,$before) 
     {
- 
+
+    	$timeTypes = array('date','time','timestamp');
+    	$required = isset($options['required']) ? $options['required'] : false;
+    	
+    	$size = isset($options['size']) ? $options['size'] : null;
+    	
+    	if (empty($this->columns)) $this->loadColumns();
+    	
+    	$sqlnull = $required ? ' NOT NULL ' :  ' NULL ';
+    	$sqlautoinc = '';
+    	
+	    $default = isset($options['default']) ? $options['default'] : null;
+    		
+	    $sqldefault = '';
+   		    
+	    if (
+  		        ($default !== null) &&    		            		        
+   		        (
+   		          (!in_array($type,$timeTypes)) ||
+   		          ($default !== 'NOW')
+   		        )
+   		       ) {    		        
+   		        $sqldefault = ' DEFAULT ' . $this->quote($default) . ' ';
+       }
+
+       if ($default == 'NOW' && in_array($type,$timeTypes)) {
+           $sqldefault = ' DEFAULT CURRENT_TIMESTAMP ';	
+       }    	
+  	
+    	
+    	$columns = array();
+    	
+    	switch($type) {    			
+   				case "integer":
+   					$columns[] = $this->nameQuote($columnName) . ' INT ' . $sqlnull . $sqldefault . $sqlautoinc; 
+   					break;
+   			    case "double_precision":    				
+   					$columns[] = $this->nameQuote($columnName) . ' DOUBLE ' . $sqlnull . $sqldefault; 
+   					break;    			    	
+   				case "character_varying":
+   					
+   					$size = $size === null ? 1 : $size + 0;
+   					if ($size > 255) {
+   						$columns[] = $this->nameQuote($columnName) . ' TEXT ' . $sqlnull . $sqldefault;
+   					} else {
+                           $columns[] = $this->nameQuote($columnName) . ' VARCHAR('.$size.') ' . $sqlnull . $sqldefault;
+   					}
+                       break;
+                   case "bit":
+   					
+   					$size = $size === null ? 1 : $size + 0;
+   					if ($size > 1) {
+   						$columns[] = $this->nameQuote($columnName) . ' BIT(' . $size . ') ' . $sqlnull . $sqldefault;
+   					} else {
+                           $columns[] = $this->nameQuote($columnName) . ' TINYINT(1) ' . $sqlnull . $sqldefault;
+   					}
+                       break;
+                   case "timestamp":
+                   	$columns[] = $this->nameQuote($columnName) . ' TIMESTAMP ' . $sqlnull . $sqldefault . $sqlautoinc;
+                   	break;                    	    					
+   				case "smallint":    				
+   				case "bit_varying":
+   				case "date":
+   				case "time":    				
+   				case "decimal":
+   				case "real":    				
+   				case "float":
+   				case "character":    				
+   				case "national_character":		
+                   case "national_character_varying":
+                   case "interval":    					
+   				default:
+   			        $e = VWP::raiseWarning("Column '$columnName' has an unknown type '".$baseType->type."'.",__CLASS__,null,false);
+   			        return $e;    					
+   			}
+    		
+
+    		$cl = $this->columns;	
+   			if (empty($before)) {
+    		    $index = count($cl) - 1;
+    		    if ($index < 0) {
+    		    	$suffix = ' FIRST ';
+    		    } else {
+    		        $suffix = ' AFTER ' . $this->nameQuote($cl[$index]['name']);
+    		    }		
+   			} else {
+   				
+   				$index = null;
+   				for($idx=0;$idx < count($cl);$idx++) {
+   					if ($cl[$idx]['name'] == $before) {
+   						$index = $idx;
+   					}
+   				}
+                if ($index === null) {
+                	$e = VWP::raiseWarning('Column '.$columnName . ' not found',__CLASS__,null,false);
+                	return $e;
+                }
+
+                if ($index < 1) {
+                	$suffix = ' FIRST ';
+                } else {                
+   			        $suffix =  ' AFTER ' . $this->nameQuote($cl[$index - 1]['name']);
+                }
+   			}
+
+   		$sql_table = $this->nameQuote($this->tableName);
+   		
+   		$query = 'ALTER TABLE ' . $sql_table . ' ADD ' . $columns[0]. $suffix;
+        $this->setQuery($query);
+    	
+    	$result = $this->query();
+        if (VWP::isWarning($result)) {
+    	    return $result;
+    	}
+    	$this->loadColumns();
+    	return true;    			
     }
+    	
+    
  
     /**
      * Update column settings
@@ -541,7 +719,7 @@ class VMysqlTable extends VMysqlDatabase
         }
   
         $response = $this->loadAssocList();
-        $this->columns = array();
+        $myColumns = array();
         $this->primary_key = null;
         foreach($response as $trow) {
             $row = array();
@@ -557,86 +735,26 @@ class VMysqlTable extends VMysqlDatabase
             if ($row["_Key"] == "PRI") {
                 $this->primary_key = $row["name"];
             }
-            array_push($this->columns,$row);
+            array_push($myColumns,$row);
         }
   
+        $this->columns = $myColumns;
         return true;
     }
  
     /**
      * Load table data
      * 
+     * Note: This function must be called to make the current database rows available
+     * 
      * @return true|object True on success, error or warning otherwise
      * @access public  
      */
    
     function loadData() 
-    {
-        $limit = '';
-        if (is_object($this->paging)) {
-            switch($this->paging->getMode()) {
-                case "page":
-                    $pagesize = $this->paging->getPageSize();
-                    $pagenum = $this->paging->getPageNum();
-                    if ($pagesize !== null) {
-                        if ($pagesize < 1) {
-                            $limit = '';
-                        } else {
-                            if ($pagenum < 1) {
-                                $pagenum = 1;
-                            }
-                            $length = (int) $pagesize;
-                            $start = ($pagenum - 1) * $length;
-                            $limit = " LIMIT $start,$length";       
-                        }
-                    }
-                    break;
-   
-                default:
-                    $this->raiseWarning("Unrecognized paging mode!",1,true);
-                    break;
-            }
-        }
-  
-        $response = $this->loadColumns();
-        if ($this->isError($response)) {
-            return $response;
-        }
-  
-        $query = "SELECT * FROM "
-           . $this->nameQuote($this->tableName)
-           . $limit;
-  
-        $this->setQuery($query);
-        $response = $this->query();
-        if ($this->isError($response)) {
-            return $response; 
-        }
-  
-        $response = $this->loadAssocList();
-  
-        $this->rows = array();
-        foreach ($response as $row) {
-            $new_row = array("fields"=>array());
-            foreach($row as $name=>$value) {
-                $columninfo = array(
-                    "name"=>$name,
-                    "value"=>$value
-                   );    
-                $new_row["fields"][$name] = $columninfo;
-            }
-
-            if ($this->primary_key === null) {    
-                $row_ob = new MysqlRow;
-                $row_ob->bind($this);
-                $row_ob->setProperties($new_row);
-                array_push($this->rows,$row_ob);    
-            } else {
-                $this->rows[$row[$this->primary_key]] = new VMysqlRow;
-                $this->rows[$row[$this->primary_key]]->bind($this);
-                $this->rows[$row[$this->primary_key]]->setProperties($new_row);        
-            }         
-        }
+    { 
+        // These days are long gone!
+        // Do not depricate - Someone else may need this        
         return true;
     }
 
@@ -652,6 +770,11 @@ class VMysqlTable extends VMysqlDatabase
     function &getRow($key,$tableName = null,$databaseName = null) 
     {
 
+    	if (!isset($this->primary_key)) {
+    	    $key = VDBI_MultiFieldIdentity::encodeKey($key);    	        	        	    
+    	}
+    	
+    	    	
         if ($this->columns === null) {
             $result = $this->loadColumns();
             if ($this->isError($result)) {
@@ -661,9 +784,12 @@ class VMysqlTable extends VMysqlDatabase
         
         // Handle new rows
   
-        if ($key === null) {   
+        if ($key === null) {
+               
             $row = new VMysqlRow;
             $row->bind($this);
+            $row->rows = array();
+            $row->_tables = null;
             $result = $row->load();
             if ($this->isError($result)) {
                 return $result;
@@ -673,15 +799,31 @@ class VMysqlTable extends VMysqlDatabase
         
         // Handle existing rows
   
-        if (!isset($this->rows[$key])) {
-            $this->rows[$key] = new VMysqlRow;
-            $this->rows[$key]->bind($this);
-            $result = $this->rows[$key]->load($key);
-            if ($this->isError($result)) {
-                $this->rows[$key] = $result;
-            }   
+        $myRows = $this->rows;
+                        
+        if (!isset($myRows[$key])) {
+
+        	$max = $this->maxcachesize > 0 ? $this->maxcachesize : 1;
+        	 
+            while (count(array_keys($myRows)) >= $max) {
+            	$old = array_keys($myRows);
+            	$myRows[$old[0]] = null;
+        	    unset($myRows[$old[0]]); 
+            }        	
+        	
+            $myRows[$key] = new VMysqlRow;
+            $myRows[$key]->bind($this);
+            $myRows[$key]->rows = array();
+            $myRows[$key]->_tables = null;             
+            $result = $myRows[$key]->load($key);
+                        
+            if ($this->isError($result)) {                
+                return $result;
+            }
+            $this->rows = $myRows;   
         }
-        return $this->rows[$key];  
+                        
+        return $myRows[$key];  
     }
  
     /**
@@ -696,10 +838,96 @@ class VMysqlTable extends VMysqlDatabase
     	}
     	
     	$cols = array();
-    	foreach($this->columns as $row) {
+    	$myColumns = $this->columns;
+    	foreach($myColumns as $row) {
     		$cols[] = $row['name'];
     	}
     	return $cols;    	
+    }
+    
+    function &get($vname,$default = null) {
+    	switch($vname) {    		
+    		case "rows":
+                $limit = '';
+                if (is_object($this->paging)) {
+                    switch($this->paging->getMode()) {
+                        case "page":
+                            $pagesize = $this->paging->getPageSize();
+                            $pagenum = $this->paging->getPageNum();
+                            if ($pagesize !== null) {
+                                if ($pagesize < 1) {
+                                    $limit = '';
+                                } else {
+                                    if ($pagenum < 1) {
+                                        $pagenum = 1;
+                                    }
+                                    $length = (int) $pagesize;
+                                    $start = ($pagenum - 1) * $length;
+                                    $limit = " LIMIT $start,$length";       
+                                }
+                            }
+                            break;
+                        default:
+                            $this->raiseWarning("Unrecognized paging mode!",1,true);
+                            break;
+                    }
+                }
+  
+                if (!isset($this->columns)) {
+                    $response = $this->loadColumns();
+                    if ($this->isError($response)) {
+                        return $response;
+                    }                    
+                }
+  
+                $query = "SELECT * FROM "
+                   . $this->nameQuote($this->tableName)
+                   . $limit;
+  
+                $this->setQuery($query);
+                $response = $this->query();
+                if ($this->isError($response)) {
+                    return $response; 
+                }
+  
+                $response = $this->loadAssocList();
+  
+                $myRows = array();
+                foreach ($response as $row) {
+                    $new_row = array("fields"=>array());
+                    foreach($row as $name=>$value) {
+                        $columninfo = array(
+                                    "name"=>$name,
+                                    "value"=>$value
+                                   );    
+                        $new_row["fields"][$name] = $columninfo;
+                    }
+
+                    if ($this->primary_key === null) {    
+                        $row_ob = new MysqlRow;
+                        $row_ob->bind($this);
+                        $row_ob->rows = array();
+                        $row_ob->_tables = null;
+                        $row_ob->setProperties($new_row);
+                        $row_ob->_new = false;
+                        $row_ob->id = new VDBI_MultiFieldIdentity($row_ob);
+                        $myRows[(string)$row_ob->id] =& $row_ob;                            
+                    } else {
+                        $myRows[$row[$this->primary_key]] = new VMysqlRow;
+                        $myRows[$row[$this->primary_key]]->bind($this);
+                        $myRows[$row[$this->primary_key]]->rows = array();
+                        $myRows[$row[$this->primary_key]]->_tables = null;
+                        $myRows[$row[$this->primary_key]]->setProperties($new_row);
+                        $myRows[$row[$this->primary_key]]->_new = false;        
+                    }         
+                }
+        
+                $ret =& $myRows;
+                break;    			
+    		default:
+    	        $ret =& parent::get($vname,$default);
+    	}
+        return $ret;
     }
     
     /**

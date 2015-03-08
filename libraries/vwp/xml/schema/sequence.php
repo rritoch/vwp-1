@@ -66,7 +66,7 @@ class VSchema_Sequence extends VObject
 	 * @access public
 	 */
 	
-	public function getItem($index)
+	public function item($index)
 	{
 	    $item = null;
 
@@ -81,6 +81,28 @@ class VSchema_Sequence extends VObject
 				$ptr++;
 			}
 		}	    	    
+	}
+	
+	/**
+	 * Get Property
+	 * 
+	 * @param string $vname Property Name
+	 * @param mixed $default Default value
+	 * @return mixed Property value
+	 * @access public
+	 */
+	
+	function &get($vname,$default = null) 
+	{
+		switch($vname) {
+			case "length":
+				$ret = $this->getLength();
+				break;
+			default:
+				$ret = parent::get($vname,$default);
+				break;
+		}
+		return $ret;
 	}
 	
 	/**

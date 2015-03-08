@@ -282,9 +282,7 @@ class AdminEventUser extends VEvent {
  function onFind($credentials,&$result) {
   global $users;
   
-  if (!isset($credentials["username"])) {
-   return false;
-  }
+
   
   if ((isset($credentials["domain"])) && ($credentials["domain"] !== null)) {
    return false;
@@ -302,6 +300,26 @@ class AdminEventUser extends VEvent {
    require($passwdfile);
   } else {
    $users = array();
+  }
+  
+  if (!isset($credentials["username"])) {
+      if (!isset($credentials["email"])) {
+          return false;
+      }
+       $ulist = array();
+       foreach($users as $uname=>$data) {
+       	   if ($data['email'] == $credentials["email"]) {
+               $ulist[] = $uname;	
+       	   }
+       }
+       if (count($ulist) < 1) {
+           return false;
+       }
+       if (!is_array($result)) {
+           $result = array();
+       }
+       $result = array_merge($ulist);
+       return $result;
   }
   
   if (isset($users[$credentials["username"]])) {

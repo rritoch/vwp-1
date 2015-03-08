@@ -133,12 +133,12 @@ class VObject extends VType
         if (is_object($to)) {
             $vars = get_object_vars($to);
             foreach($vars as $key => $value) {
-                $this->$key = & $to->$key;
+                $this->$key = $to->$key;
             }
         }
         if (is_array($to)) {
             foreach($to as $key => $value) {
-                $this->$key = & $to[$key];
+                $this->$key = $to[$key];
             }   
         }  
     }
@@ -280,7 +280,7 @@ class VObject extends VType
      * @return mixed previous Value
      */
              
-    function set( $vname, $value = null ) 
+    function &set( $vname, $value) 
     {
         $previous = isset($this->$vname) ? $this->$vname : null;
         $this->$vname = $value;
@@ -369,6 +369,28 @@ class VObject extends VType
             array_push($properties,'"' . addcslashes($k) . '"=>' . var_export($v,true));
         }
         return $className . "[" . implode(",",$properties) . "]";
+    }
+    
+    function &__get($name) 
+    {
+       $r =& $this->get($name);             
+       return $r;	
+    }
+    
+    function &__set($name,$value) 
+    {
+        $r =& $this->set($name,$value);
+        return $r;	
+    }
+    
+    function __unset($name) 
+    {
+    	unset($this->$name);
+    }
+    
+    function __isset($name) 
+    {
+    	return isset($this->$name);
     }
     
     // end class VObject

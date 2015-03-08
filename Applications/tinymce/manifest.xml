@@ -7,14 +7,14 @@
  <author>Ralph Ritoch</author>
  <author_link>http://www.vnetpublishing.com</author_link>
  <copyright>Ralph Ritoch - GPL/LGPL</copyright>
- <version>1.0.1</version>
+ <version>1.0.2</version>
  <version_start_date></version_start_date>
  <version_release_date></version_release_date> 
- <folder name="setup" version="1.0.1">
+ <folder name="setup" version="1.0.2">
   <file>/installer.php</file>
   <file>/index.html</file>
  </folder>
- <folder name="base" version="1.0.1">
+ <folder name="base" version="1.0.2">
   <file>/manifest.xml</file>
   <file>/models/tinymce.php</file>
   <file>/tinymce.php</file>
@@ -22,14 +22,18 @@
   <file>/widgets/editor/layouts/html/default.php</file>
   <file>/index.html</file>
   <file>/models/index.html</file>
+  <file>/models/images.php</file>
+  <file>/widgets/index.html</file>
   <file>/widgets/editor/index.html</file>
   <file>/widgets/editor/layouts/html/index.html</file>
   <file>/widgets/editor/layouts/index.html</file>
-  <file>/widgets/index.html</file>  
+  <file>/widgets/images/images.php</file>
+  <file>/widgets/images/layouts/js/default.php</file>      
  </folder>
- <folder name="library" version="1.0.1">
+ <folder name="library" version="1.0.2">
   <file>/tinymce.php</file>
   <file>/tinymce_3_3_8/tinymce.php</file>
+  <file>/tinymce_3_3_8/lists/empty_image_list.js</file>
   <file>/tinymce_3_3_8/tinymce/changelog.txt</file>
   <file>/tinymce_3_3_8/tinymce/examples/css/content.css</file>
   <file>/tinymce_3_3_8/tinymce/examples/css/word.css</file>

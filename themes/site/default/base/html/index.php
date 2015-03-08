@@ -31,6 +31,9 @@
  </div>
  <div id="menubar">
   <vdoc:include app="menu" widget="hmenu" name="topmenu" />
+  <div style="float: right; margin: 0; padding: 0px 0px;">
+   <vdoc:include app="search" widget="box" />
+  </div>
  </div>
 <?php if (count($this->errors) > 0) { ?>
 <div id="error_win"><div><div><div>

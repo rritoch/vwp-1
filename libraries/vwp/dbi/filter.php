@@ -148,6 +148,7 @@ class VDatabaseFilter extends VObject
      * 
      * @param string $key Variable name
      * @param string Match operator
+     * @param mixed $val Value
      * @return true|object True on success, error or warning on failure   
      * @access public
      */
@@ -161,6 +162,10 @@ class VDatabaseFilter extends VObject
             case "<>":
             case "<":
             case ">":
+            case "GLOB":
+            case "IGLOB":
+            case "NOT GLOB":
+            case "NOT IGLOB":
             // do nothing
                 break;
             default:

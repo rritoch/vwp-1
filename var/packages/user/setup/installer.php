@@ -3,10 +3,10 @@
 VWP::RequireLibrary('vwp.archive.installer');
 
 /**
- * Base installer 1.0.1
+ * Base installer 1.0.2
  */
 
-class User_1_0_1_Base extends VInstaller {
+class User_1_0_2_Base extends VInstaller {
 
  function process($mode) {
   $this->base_mode = $mode;      
@@ -52,7 +52,7 @@ class User_1_0_1_Base extends VInstaller {
  function __construct() {
   
   $this->setAppId("user");
-  $this->setBaseVersion(array(1,0,1));   
+  $this->setBaseVersion(array(1,0,2));   
   $this->setName("User");          
   $this->setAuthor("Ralph Ritoch");
   $this->setWebsite("VNetPublishing.Com","http://www.vnetpublishing.com");
@@ -64,7 +64,7 @@ class User_1_0_1_Base extends VInstaller {
  * Version installer 1.0.0
  */
 
-class User_1_0_1_Sub_1_0_0 extends User_1_0_1_Base 
+class User_1_0_2_Sub_1_0_0 extends User_1_0_2_Base 
 {
  	
   /**
@@ -195,10 +195,10 @@ class User_1_0_1_Sub_1_0_0 extends User_1_0_1_Base
 
 
 /**
- * Version installer 1.0.0
+ * Version installer 1.0.1
  */
 
-class User_1_0_1_Sub_1_0_1 extends User_1_0_1_Base 
+class User_1_0_2_Sub_1_0_1 extends User_1_0_2_Base 
 {
 
 	
@@ -510,13 +510,209 @@ class User_1_0_1_Sub_1_0_1 extends User_1_0_1_Base
   $this->finish($result);
   return $result;  
  }
-   
+
+ 
+     function __construct() 
+     {
+         $this->setVersion(array(1,0,1));   
+         $this->setReleaseDate("December 3, 2010");
+         parent::__construct();
+     }
+     
+     // end class User_1_0_1_Base 
+} 
+ 
+/**
+ * Version installer 1.0.2
+ */
+
+class User_1_0_2_Sub_1_0_2 extends User_1_0_2_Base 
+{
+
+	
+ function getConfigKey() {
+  return "SOFTWARE\\VNetPublishing\\User\\Config";
+ }
+ 
+ /**
+  * Get configuration settings
+  * 
+  * @return array|object Configuration settings on success, error or warning otherwise
+  */       
+ 
+ function getConfig() {
+  $localMachine = & Registry::LocalMachine();
+  
+  $result = Registry::RegOpenKeyEx($localMachine,
+                        self::getConfigKey(),
+                        0,
+                        0, //samDesired
+                        $registryKey);
+                         
+  if (!VWP::isWarning($result)) {     
+    $data = array();
+    $idx = 0;
+    $keylen = 255;
+    $vallen = 255;
+    $lptype = REG_SZ; 
+    while (!VWP::isError($result = Registry::RegEnumValue(
+                                     $registryKey,
+                                     $idx++,
+                                     $key,
+                                     $keylen,
+                                     0, // reserved
+                                     $lpType,
+                                     $val,
+                                     $vallen)))  {
+   if (!VWP::isWarning($result) || $result->errno = ERROR_MORE_DATA) {                                       
+     $data[$key] = $val;
+     $keylen = 255;
+     $vallen = 255;  
+    }
+   }  
+   Registry::RegCloseKey($registryKey);
+   Registry::RegCloseKey($localMachine);
+   return $data;
+  }
+  
+  Registry::RegCloseKey($localMachine);
+  return $result;
+ 
+ }    
+	
+	
+	function initDB() 
+	{
+		return true;
+	}	
+	
+	function uninitDB() 
+	{
+		return true;
+	}
+	
+  /**
+   * Version install method
+   * 
+   * @access public      
+   */     
+
+ function version_install() {
+        
+  $tasks = array('initDB',
+                 'copyfiles',
+                 'installEvents',
+                 'installMenuLinks');
+  
+  $applinks = array();
+  
+  $applinks[] = array(
+    "type"=>"applink",
+    "text"=>'User Administration',
+    "widget"=>'user.admin.users'  
+  );
+    
+  $this->setMenuLinks('app_admin',$applinks);  
+  
+  $base = dirname(dirname(__FILE__)).DS.'base'.DS.'events';
+  
+  $events = array(
+   array( // user/admin
+    "type"=>"user",
+    "id"=>"admin",
+    "filename"=>$base.DS.'user'.DS.'admin.php'),
+   array( // auth/admin
+    "type"=>"auth",
+    "id"=>"admin",
+    "filename"=>$base.DS.'auth'.DS.'admin.php'),    
+   array( // session/admin
+    "type"=>"session",
+    "id"=>"admin",
+    "filename"=>$base.DS.'session'.DS.'admin.php'),
+   array(
+    "type"=>"user",
+    "id"=>"user",
+    "filename"=>$base.DS.'user'.DS.'user.php'),
+   array(
+    "type"=>"auth",
+    "id"=>"user",
+    "filename"=>$base.DS.'auth'.DS.'user.php'),   
+  );
+  
+  $this->setEvents($events);
+  
+  $result = $this->runAll($tasks);
+     
+  $this->finish($result);
+  return $result;  
+ }
+
+  /**
+   * Version uninstall method
+   * 
+   * @access public      
+   */     
+
+ function version_uninstall() {
+        
+  $tasks = array('uninitDB',
+                 'deletefiles',
+                 'uninstallEvents',
+                 'uninstallMenuLinks');
+  
+  $applinks = array();
+  
+  $applinks[] = array(
+    "type"=>"applink",
+    "text"=>'User Administration',
+    "widget"=>'user.admin.users'  
+  );
+  
+  $this->setMenuLinks('app_admin',$applinks);  
+  
+  $base = dirname(dirname(__FILE__)).DS.'base'.DS.'events';
+  
+  $evtBase = VWP::getVarPath('vwp').DS.'events';
+  
+  $events = array(
+   array( // user/admin
+    "type"=>"user",
+    "id"=>"admin",
+    "filename"=>$evtBase.DS.'user'.DS.'admin.php'),
+   array( // auth/admin
+    "type"=>"auth",
+    "id"=>"admin",
+    "filename"=>$evtBase.DS.'auth'.DS.'admin.php'),    
+   array( // session/admin
+    "type"=>"session",
+    "id"=>"admin",
+    "filename"=>$evtBase.DS.'session'.DS.'admin.php'),
+   array(
+    "type"=>"user",
+    "id"=>"user",
+    "filename"=>$evtBase.DS.'user'.DS.'user.php'),
+   array(
+    "type"=>"auth",
+    "id"=>"user",
+    "filename"=>$evtBase.DS.'auth'.DS.'user.php'),   
+  );
+  
+  $this->setEvents($events);
+  
+  $result = $this->runAll($tasks);
+     
+  $this->finish($result);
+  return $result;  
+ }
+ 
+ 
+ 
  function __construct() {
    // register previous version
-   $o1 = new User_1_0_1_Sub_1_0_0;
+   $o1 = new User_1_0_2_Sub_1_0_0;
    
-   $this->setVersion(array(1,0,1));   
-   $this->setReleaseDate("December 3, 2010");
+   $this->setVersion(array(1,0,2));   
+   $this->setReleaseDate("February 3, 2010");
    parent::__construct();
  }
    
@@ -528,6 +724,6 @@ class User_1_0_1_Sub_1_0_1 extends User_1_0_1_Base
  * Interface class
  */
   
-class User_1_0_1_Installer  extends User_1_0_1_Sub_1_0_1 {
+class User_1_0_2_Installer  extends User_1_0_2_Sub_1_0_2 {
  // interface class
 }

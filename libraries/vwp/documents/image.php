@@ -752,7 +752,7 @@ class ImageDocument extends VDocument
         $bcfg = array('alias'=>'content');
         $screenId = $this->createScreenBuffer($bcfg);                
         $template = $this->getBuffer($screenId);
-          
+        
         $redirect = VWP::getRedirectURL();
         $sess =& VSession::getInstance();
           

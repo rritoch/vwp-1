@@ -39,7 +39,8 @@ class Menumgr_Model_Menu extends VModel {
    "link"=>"Link",
    "spacer"=>"Spacer",
    "category"=>"Category",
-   "applink"=>"Application"
+   "applink"=>"Application",
+   "menu"=>"Sub Menu",
   );
  }
  
@@ -47,7 +48,7 @@ class Menumgr_Model_Menu extends VModel {
  
   $ob =& $this->_getWidgetParams($widget,$ref);
   if (VWP::isWarning($ob)) {
-  	$ob->ethrow();
+  	//$ob->ethrow();
    return array();
   }
   
@@ -198,6 +199,7 @@ class Menumgr_Model_Menu extends VModel {
   if (VWP::isWarning($item)) {
    return $item;    
   }
+  
   foreach($settings as $key=>$val) {
    $item->set($key,$val);
   }
@@ -212,9 +214,12 @@ class Menumgr_Model_Menu extends VModel {
    return $ret;
   }
   
+  /**
   if (empty($params)) {
    return $ret;
   }
+  */
+  
   
   if (!isset($settings["ref"])) {
    return $ret;
@@ -225,13 +230,30 @@ class Menumgr_Model_Menu extends VModel {
   }
   
   $widget = $settings["widget"];
-  $ob =& $this->_getWidgetParams($widget,$ref);
-  if (VWP::isWarning($ob)) {
-   return $ret;
+  
+  if (!empty($params)) {
+      $ob =& $this->_getWidgetParams($widget,$ref);
+      if (!VWP::isWarning($ob)) {
+          $ob->bind($params);  
+          $ok = $ob->saveRef($ref);
+          if (VWP::isWarning($ok)) {
+              $ok->ethrow();
+          }
+      }      
+  }
+  if (!VWidgetReference::exists($ref)) {
+      VWidgetReference::create($ref);       
   }
   
-  $ob->bind($params);  
-  return $ob->saveRef($ref);     
+  $refob =& VWidgetReference::load($ref);
+  
+  if (VWP::isWarning($refob)) {
+      return $refob;
+  }
+  
+  $refob->widgetId = $settings['widget'];
+  return $refob->save();
+  
  }
  
  function addItem($item) {  

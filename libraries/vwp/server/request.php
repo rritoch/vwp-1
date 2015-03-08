@@ -129,6 +129,32 @@ class VRequest extends VHTTPRequest
     {
         return isset(self::$_request['path_info']) ? self::$_request['path_info'] : null;
     }
+    
+    /**
+     * Get URI
+     * 
+     * @return string URI
+     * @access public
+     */
+     
+    public static function getURI() 
+    {
+        return isset(self::$_request['uri']) ? self::$_request['uri'] : null;
+    }
+    
+    /**
+     * Get Script Name
+     * 
+     * @return string URI
+     * @access public
+     */
+     
+    public static function getScriptName() 
+    {
+        return isset(self::$_request['script_name']) ? self::$_request['script_name'] : null;
+    }    
+    
+        
               
     /**
      * Initalize data

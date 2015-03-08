@@ -7,14 +7,14 @@
  <author>Ralph Ritoch</author>
  <author_link>http://www.vnetpublishing.com</author_link>
  <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
- <version>1.0.1</version>
- <version_start_date>September 7, 2010</version_start_date>
+ <version>1.0.2</version>
+ <version_start_date>March 6, 2010</version_start_date>
  <version_release_date></version_release_date> 
- <folder name="setup" version="1.0.1">
+ <folder name="setup" version="1.0.2">
   <file>/installer.php</file>
   <file>/index.html</file>
  </folder>
- <folder name="base" version="1.0.0">
+ <folder name="base" version="1.0.2">
   <file>/manifest.xml</file>
   <file>/thememgr.php</file>
   <file>/models/frames.php</file>
@@ -35,7 +35,7 @@
   <file>/widgets/thememgr/layouts/html/install.php</file>
   <file>/widgets/thememgr/thememgr.php</file>
  </folder>
- <folder name="base" version="1.0.1">
+ <folder name="base" version="1.0.2">
   <file>/manifest.xml</file>
   <file>/thememgr.php</file>
   <file>/models/frames.php</file>

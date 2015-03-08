@@ -3,29 +3,66 @@
 /**
  * Content Manager Entry Point 
  *  
- * This is the default entry for any components
- * there is no need to modify this file in any way!  
+ * @package    VWP.Content
+ * @subpackage Base
+ * @author Ralph Ritoch <rritoch@gmail.com> 
+ * @copyright (c) Ralph Ritoch 2011 - All rights reserved
+ * @link http://www.vnetpublishing.com VNetPublishing.Com
+ * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License 
+ */
+ 
+// No direct access
+class_exists( 'VWP' ) or die( 'Restricted access' );
+
+/**
+ * Require Widget Support
+ */
+
+VWP::RequireLibrary('vwp.ui.widget');
+
+/**
+ * Content Manager Entry Point 
  *  
  * @package    VWP.Content
  * @subpackage Base
  * @author Ralph Ritoch <rritoch@gmail.com> 
- * @copyright (c) Ralph Ritoch - All rights reserved
- * @link http://www.espirithosting.com
- * @todo Documentation and Licensing 
+ * @copyright (c) Ralph Ritoch 2011 - All rights reserved
+ * @link http://www.vnetpublishing.com VNetPublishing.Com
+ * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License 
  */
- 
-// No direct access
 
-class_exists( 'VWP' ) or die( 'Restricted access' );
+class contentApplication extends VApplication 
+{
 
-VWP::RequireLibrary('vwp.ui.widget');
-
-class contentApplication extends VApplication {
-
-    var $_app_default_theme_class = 'site';
-    var $_app_default_widget = 'home';
+	/**
+	 * Default Theme Class
+	 * 
+	 * @var string $_app_default_theme_class Theme Class
+	 * @access public
+	 */
+	
+    public $_app_default_theme_class = 'site';
     
-  function main($args,$env) {
+    /**
+     * Default Widget Name
+     * 
+     * @var string $_app_default_widget Widget Name
+     * @access public
+     */
+    
+    public $_app_default_widget = 'home';
+    
+    /**
+     * Application Entry Point
+     * 
+     * @param array $args Arguments
+     * @param array $env Environment Variables
+     * @return mixed Result
+     * @access public
+     */
+    
+    function main($args,$env) 
+    {
         
         $user =& VUser::getCurrent();
         $shellob =& $user->getShell();
@@ -49,8 +86,14 @@ class contentApplication extends VApplication {
         $widget->redirect();
               
         return $result;  
-  }
+    }
  
+    /**
+     * Class Constructor
+     * 
+     * @access public
+     */
+    
     function __construct() 
     {
  	  

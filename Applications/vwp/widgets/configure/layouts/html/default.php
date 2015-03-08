@@ -138,4 +138,9 @@
 <input type="hidden" name="widget" value="configure" />
 <input type="hidden" name="screen" value="<?php echo htmlentities($this->screen); ?>" />
 </form>
+
+<blockquote>
+ <p>See Instructions located in the htaccess.txt file located in the root folder of your installation before attempting to enable SEF Rewrite mode.</p> 
+</blockquote>
+<br />
 <?php echo $this->menu_foot ?>

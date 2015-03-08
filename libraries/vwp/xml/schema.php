@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Virtual Web Platform - Schema Processing
+ * Virtual Web Platform - XML Schema Processing
  *  
- * This file provides Schema Processing
+ * This file provides XML Schema Processing support
  *        
  * @package VWP
  * @subpackage Libraries.XML  
  * @author Ralph Ritoch <rritoch@gmail.com>
- * @copyright (c) Ralph Ritoch - All Rights Reserved
+ * @copyright (c) Ralph Ritoch 2011 - All Rights Reserved
  * @link http://www.vnetpublishing.com VNetPublishing.Com
  * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License  
  */
@@ -34,70 +34,214 @@ VWP::RequireLibrary('vwp.xml.schema.sequence');
 /**
  * Virtual Web Platform - Schema Processing
  *  
- * This class provides Schema Processing
+ * This class provides XML Schema Processing
  *        
  * @package VWP
  * @subpackage Libraries.XML  
  * @author Ralph Ritoch <rritoch@gmail.com>
- * @copyright (c) Ralph Ritoch - All Rights Reserved
+ * @copyright (c) Ralph Ritoch 2011 - All Rights Reserved
  * @link http://www.vnetpublishing.com VNetPublishing.Com
  * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License  
  */
 
+class VSchema extends VObject 
+{
+	/**
+	 * Timeout in seconds
+	 * 
+	 * @var integer $timeout Timeout
+	 * @access public
+	 */
+	
+    public $timeout = 86400;
 
-
-class VSchema extends VObject {
-    var $timeout = 86400;
-
-    var $_processed = false;
+    /**
+     * Schema Processed Flag
+     * 
+     * @var boolean $_processed Processed
+     * @access public
+     */
     
-    var $_rootDoc;
+    public $_processed = false;
     
-    var $_source = null;
-    var $_cacheFile = null;
+    /**
+     * Root Schema Document
+     * 
+     * @var object $_rootDoc Root DOM Document
+     * @access public
+     */
     
-    var $_imported = array();
+    public $_rootDoc;
+    
+    /**
+     * Schema Source
+     * 
+     * @var string $_source Source
+     * @access public
+     */
+    
+    public $_source = null;
+    
+    /**
+     * Cache File
+     * 
+     * @var string $_cacheFile Cache file
+     * @access public
+     */
+    
+    public $_cacheFile = null;
+    
+    /**
+     * Imported Schema's
+     * 
+     * @var array $_imported Imported Schema's
+     * @access public
+     */
+    
+    public $_imported = array();
+    
+    /**
+     * File Driver
+     * 
+     * @var VFile $_vfile File driver
+     * @access public
+     */
                 
     static $_vfile;
-    static $_vfolder;    
-    static $_gc_flag = false;    
+    
+    /**
+     * Folder Driver
+     * 
+     * @var VFile $_vfolder Folder driver
+     * @access public
+     */    
+    
+    static $_vfolder; 
+
+    /**
+     * Garbage Collection Flag
+     * 
+     * True if garbage collection has been executed, or false otherwise
+     * 
+     * @var boolean $_gc_flag Garbage Collection Flag
+     * @access public 
+     */
+    
+    static $_gc_flag = false;
+
+    /**
+     * Schema Cache Index
+     * 
+     * @var object Cache Index DOM Document
+     * @access public
+     */
+    
     static $_index;
+    
+    /**
+     * Index Dirty Flag
+     * 
+     * True if index has been modified or false otherwise
+     * 
+     * @var boolean $_index_dirty Index Dirty Flag
+     * @access public
+     */
+    
     static $_index_dirty = false;
-    static $_index_map;    
+    
+    /**
+     * Index Map
+     * 
+     * The index map is an associative array of cache files indexed by URL
+     * 
+     * @var array $_index_map Index Map
+     * @access public
+     */    
+    
+    static $_index_map;
+
+    /**
+     * Cache
+     *
+     * @var array $_cache Cache
+     * @access public
+     */
+    
     static $_cache = array();
     
+    /**
+     * Get Cache File
+     * 
+     * @return string Cache File
+     * @access public
+     */
     
-    function getCacheFile() {    
+    function getCacheFile() 
+    {    
         return $this->_cacheFile;
     }
     
-    public static function getKnownSchemaNamespaces() {
+    /**
+     * Get Known Schema Namespaces
+     * 
+     * Returns an associative array of Schema namespace definitions indexed by namespace for supported versions of XML Schema.
+     * This method is provided for future support of multiple versions of the
+     * XML Schema specification.
+     * 
+     * @return array Known Schema Namespaces
+     * @access public
+     */
     
+    public static function getKnownSchemaNamespaces() 
+    {    
        return array(
         'http://www.w3.org/2001/XMLSchema'=>'http://www.w3.org/2001/XMLSchema.xsd'
        );
        
     }
-        
-    public static function isElementTypeNS($node,$ns,$name) {
+
+    /**
+     * Check if node is an element node of the selected type 
+     * 
+     * @param object $node Node
+     * @param string|array $ns Namespace(s)
+     * @param string|array $name Element Name(s)
+     * @return boolean True if node is an element of the selected type
+     * @access public
+     */
+    
+    public static function isElementTypeNS($node,$ns,$name) 
+    {
                 
         if ($node->nodeType != XML_ELEMENT_NODE) {            
             return false;
         }
         
-        if (is_string($ns)) {
-            $node = array($ns);
-        }
+        // Clean Namespaces
         
-        if (is_string($name)) {
+        if (!is_array($ns)) {
+            $ns = array($ns);
+        }
+
+        foreach($ns as $k=>$v) {
+        	$ns[$k] = (string)$v;
+        }        
+        
+        // Clean Names
+        
+        if (!is_array($name)) {
             $name = array($name);
         }
         
-        if (!in_array($node->namespaceURI,$ns)) {            
+        foreach($name as $k=>$v) {
+        	$name[$k] = (string)$v;
+        }
+        
+        if (!in_array((string)$node->namespaceURI,$ns)) {            
             return false;
         }
         
-        $parts = explode(':',$node->nodeName);
+        $parts = explode(':',(string)$node->nodeName);
         $nodeName = array_pop($parts);
         
         if (!in_array($nodeName,$name)) {
@@ -107,9 +251,17 @@ class VSchema extends VObject {
         return true;
     }
     
-
+    /**
+     * Get Defined Types
+     * 
+     * @param string $ns Namespace
+     * @param array $skip List of sources to skip
+     * @return array Datatypes Indexed By Id
+     * @access public 
+     */
     
-    public function getTypes($ns = null, $skip = array()) {
+    public function getTypes($ns = null, $skip = array()) 
+    {
         $dataTypes = array();
         $schemaNS = array_keys(self::getKnownSchemaNamespaces());
         $typeElements = array('simpleType','complexType');
@@ -149,17 +301,42 @@ class VSchema extends VObject {
         return $dataTypes;        
     }
     
-    function getSource() {
+    /**
+     * Get Schema Source URI
+     * 
+     * @return string Source URI
+     * @access public
+     */
+    
+    function getSource() 
+    {
         return $this->_source;
     }
     
-    public function isRemoteSource() {
+    /**
+     * Is Remote Source
+     * 
+     * @return boolean True if schema defined at a remote location
+     * @access public
+     */
+    
+    public function isRemoteSource() 
+    {
         return (substr($this->_source,0,5) == 'http:') || 
                (substr($this->_source,0,6) == 'https:');
     
     }
     
-    public function isAbsoluteURL($url) {
+    /**
+     * Is an Absolute URL
+     * 
+     * @param string $url URL
+     * @return boolean True if provided URL is an absolute URL
+     * @access public
+     */
+    
+    public function isAbsoluteURL($url) 
+    {
         if (substr($url,1,1) == ':') {
             return true; // Windows Absolute Path
         }
@@ -181,8 +358,17 @@ class VSchema extends VObject {
                 
         return false; 
     }
-        
-    public function getAbsoluteURL($path) {
+
+    /**
+     * Get an absolute URL of the provided path
+     *      
+     * @param string $path Path
+     * @return string Absolute URL
+     * @access public
+     */
+    
+    public function getAbsoluteURL($path) 
+    {
         if (self::isAbsoluteURL($path)) {
             return $path;
         }        
@@ -209,9 +395,24 @@ class VSchema extends VObject {
         return $realPath;
     }
     
-    public function &document() {
+    /**
+     * Schema Document Object
+     * 
+     * @return object Schema DOM Document
+     * @access public
+     */
+    
+    public function &document() 
+    {
         return $this->_rootDoc;
     }
+    
+    /**
+     * Get Schema Element Node
+     * 
+     * @return object Node on success, error or warning otherwise
+     * @access public
+     */
     
     public function getSchemaElement() 
     {
@@ -225,6 +426,93 @@ class VSchema extends VObject {
          }
          return VWP::raiseWarning('Schema Element Not Found',__CLASS__,null,false);	
     }
+    
+    /**
+     * Get Target Namespace
+     * 
+     * @return string|object Target namespace on success, error or warning otherwise
+     * @access public
+     */
+    
+    public function getTargetNamespace() 
+    {
+    	$schemaElement = $this->getSchemaElement();
+    	if (VWP::isWarning($schemaElement)) {
+    		return $schemaElement;
+    	}
+    	
+
+    	if ($schemaElement->hasAttribute('targetNamespace')) {
+    	    return (string)$schemaElement->getAttribute('targetNamespace');
+    	}
+    	
+        return VWP::raiseWarning('Target Namespace not defined',__CLASS__,null,false);    	
+    }
+    
+    /**     
+     * Get Global Type Declaration
+     * 
+     * @todo Process Imports and XSI:schemaLocation in VSchema::getGlobalTypeDecl
+     * @param string $namespaceURI Namespace
+     * @param string $type Type
+     * @return object Type Declaration Node on success, error or warning otherwise
+     * @access public
+     */
+    
+    public function getGlobalTypeDecl($namespaceURI,$type) 
+    {
+        $schemaNode = $this->getSchemaElement();
+        $targetNamespace = $this->getTargetNamespace();
+        
+        if (!(VWP::isWarning($schemaNode) || VWP::isWarning($targetNamespace))) {
+                        
+            // Process Local
+            
+            if ($targetNamespace == (string)$namespaceURI) {
+            	$simpleTypes = $schemaNode->getElementsByTagNameNS('http://www.w3.org/2001/XMLSchema','simpleType');
+            	$len = $simpleTypes->length;
+            	for($idx=0;$idx < $len;$idx++) {
+            		$item = $simpleTypes->item($idx);
+            		if ((string)$type == (string)$item->getAttribute('name')) {
+            			return $item;
+            		}
+            	}
+            	$complexTypes = $schemaNode->getElementsByTagNameNS('http://www.w3.org/2001/XMLSchema','complexType');
+            	$len = $complexTypes->length;
+            	for($idx=0;$idx < $len;$idx++) {
+            		$item = $complexTypes->item($idx);
+            		if ((string)$type == (string)$item->getAttribute('name')) {
+            			return $item;
+            		}
+            	}
+
+            	// Process imports here!
+
+            	// Not Found!
+            	return VWP::raiseWarning('Schema type "'.(string)$namespaceURI.':'.(string)$type.'" not found!',__CLASS__,null,false);
+            }
+
+            // Process SchemaType
+            
+            $schemaNSList = self::getKnownSchemaNamespaces();
+             
+            if (in_array((string)$namespaceURI,array_keys($schemaNSList))) {
+                $schema = self::getSchema($schemaNSList[(string)$namespaceURI]);
+                $typeDecl = $schema->getGlobalTypeDecl($namespaceURI,$type);                
+                return $typeDecl;	
+            }
+            
+        }
+        
+        return VWP::raiseWarning('Schema type "'.(string)$namespaceURI.':'.(string)$type.'" not found!',__CLASS__,null,false);        
+    }
+    
+    /**
+     * Get Global Element Declaration By Name
+     * 
+     * @param string $name Qualified Name
+     * @access public
+     */
     
     public function getGlobalElementDeclByName($name) 
     {
@@ -243,7 +531,9 @@ class VSchema extends VObject {
              	$validNS = true;
              	
                 if (!empty($prefix)) {
-    		        $validNS = $schemaElement->lookupNamespaceURI($prefix) == $schemaElement->lookupNamespaceURI(null) ? true : false;  
+    		        //$validNS = $schemaElement->lookupNamespaceURI($prefix) == $schemaElement->lookupNamespaceURI(null) ? true : false;
+    		        
+    		        $validNS = $schemaElement->lookupNamespaceURI($prefix) == $this->getTargetNamespace() ? true : false;
     	        }
              	
     	        if ($validNS) {
@@ -266,23 +556,65 @@ class VSchema extends VObject {
     }
     
     /**
+     * Get Element Declaration Node
+     * 
+     * This method will follow any ref attributes to find the actual declaration of the element
+     * 
+     * @param object $schemaElementRefNode Element Node
+     * @return object Declaration node on success, error or warning otherwise 
+     * @access public
+     */
+    
+    function getElementDecl($schemaElementRefNode)
+    {
+    	$schemaNSList = self::getKnownSchemaNamespaces();
+    	
+        if ( (!is_object($schemaElementRefNode)) 
+             || $schemaElementRefNode->nodeType != XML_ELEMENT_NODE
+             || (!in_array((string)$schemaElementRefNode->namespaceURI,array_keys($schemaNSList)))
+             || ('element' != (string)$schemaElementRefNode->localName)             
+            ) {
+        	return VWP::raiseWarning('Invalid element Node!',__CLASS__,null,false);
+        }
+
+        $ref = $schemaElementRefNode->hasAttribute('ref') ? $schemaElementRefNode->getAttribute('ref') : null;
+    	if ($ref === null) {
+    		$declNode = $schemaElementRefNode;
+    	} else {    		
+    		$declNode = $this->getGlobalElementDeclByName($ref);
+    	}
+    	return $declNode;        
+    }
+    
+    /**
+     * Get localName of provided Element Declaration
+     *
+     * @param DOMElement $node Element declaration node
+     * @return string|object Local Name on success, error or warning otherwise
+     * @access public
+     */
+    
+    function getElementDeclLocalName($node) 
+    {
+    	$declNode = $this->getElementDecl($node);
+    	if (VWP::isWarning($declNode)) {
+    		return $declNode;
+    	}
+    	return (string)$declNode->getAttribute('name');    	
+    }
+    
+    /**
      * Get Elements Declared Attributes
      * 
      * @param DOMElement $node Element declaration node
-     * @return array|object Attributes
+     * @return array|object Attribute declarations on success, error or warning otherwise
+     * @access public
      */
     
     public function getElementDeclAttributes($node) 
     {
-    	// Get Declaration Node
-    	
-    	$ref = $node->hasAttribute('ref') ? $node->getAttribute('ref') : null;
-    	if ($ref === null) {
-    		$declNode = $node;
-    	} else {    		
-    		$declNode = $this->getGlobalElementDeclByName($ref);
-    	}
-    	
+
+    	$declNode = $this->getElementDecl($node);
     	if (VWP::isWarning($declNode)) {
     		return $declNode;
     	}
@@ -332,6 +664,9 @@ class VSchema extends VObject {
     
     /**
      * Get attribute declaration maximum length
+     * 
+     * This method returns null if the maximum length is not defined
+     * or if the maximum length is not a numeric value.
      * 
      * @param DOMElement $node Attribute node
      * @return integer Length
@@ -402,7 +737,7 @@ class VSchema extends VObject {
     }
     
     /**
-     * Get Attribute's base type 
+     * Get base type of an attribute declaration 
      * 
      * Note: The base type is returned as an object with a namespace property and a type property
      *  
@@ -475,37 +810,17 @@ class VSchema extends VObject {
     }
     
     /**
-     * Get Elements Declared Child Element Sequence
+     * Get Sequence of a Complex Type Declaration
      * 
-     * @param DOMElement $node Element declaration node
-     * @return VSchema_Sequence|object Schema Sequence on success, error or warning otherwise
-     */    
+     * @param object $complexTypeNode Complex Type Declaration Node
+     * @return VSchema_Sequence|object Sequence on success, error or warning otherwise
+     * @access public
+     */
     
-    public function &getElementDeclSequence($node) 
+    public function &getSequenceDecl($complexTypeNode) 
     {
-    	 // check children for complex type
-        $complexTypeNode = null;
     	$ns_list = array_keys(self::getKnownSchemaNamespaces());
-    	 
-    	$l = $node->childNodes->length;
-    	for($idx=0;$idx < $l; $idx++) {
-    	    $c = $node->childNodes->item($idx);
-    	    if ( $c->nodeType == XML_ELEMENT_NODE &&
-    	         $c->localName == 'complexType' &&
-    	         in_array($c->namespaceURI,$ns_list)
-    	       ) {
-    	        $complexTypeNode = $c;
-    	        $idx = $l;   	
-    	    }
-    	}
-    	 
-    	 if ($complexTypeNode === null) {
-    	     $e = VWP::raiseWarning('Sequence not found! Declaration does not allow child nodes!',__CLASS__,null,false);
-    	     return $e;
-    	 }
-    	     	 
-        $sequenceNode = null;
-    	    	 
+    	
     	$l = $complexTypeNode->childNodes->length;
     	for($idx=0;$idx < $l; $idx++) {
     	    $c = $complexTypeNode->childNodes->item($idx);
@@ -524,13 +839,75 @@ class VSchema extends VObject {
     	 }
 
     	 $sequence = new VSchema_Sequence($sequenceNode);
-    	 return $sequence;
+    	 return $sequence;    	
     }
     
+    /**
+     * Get Sequence of a Element Declaration
+     * 
+     * @param object $node Element declaration node
+     * @return VSchema_Sequence|object Schema Sequence on success, error or warning otherwise
+     * @access public
+     */    
     
+    public function &getElementDeclSequence($node) 
+    {
+    	
+        // Get Declaration Node
+    	
+    	$ref = $node->hasAttribute('ref') ? $node->getAttribute('ref') : null;
+    	if ($ref === null) {
+    		$declNode = $node;
+    	} else {    		
+    		$declNode = $this->getGlobalElementDeclByName($ref);
+    	}    	
+    	
+    	 // check children for complex type
+        $complexTypeNode = null;
+        
+        if ($declNode->hasAttribute('type')) {
+        	$nInfo = $this->parseQualifiedName($declNode,$declNode->getAttribute('type'));        	
+        	$complexTypeNode = $this->getGlobalTypeDecl($nInfo->namespaceURI,$nInfo->localName);
+        	if (VWP::isWarning($complexTypeNode)) {
+        		return $complexTypeNode;
+        	}
+        	if ('complexType' !== (string)$complexTypeNode->localName) {
+                $complexTypeNode = null;        		
+        	}
+        } else {
+    	    $ns_list = array_keys(self::getKnownSchemaNamespaces());
+    	 
+    	    $l = $declNode->childNodes->length;
+    	    for($idx=0;$idx < $l; $idx++) {
+    	        $c = $declNode->childNodes->item($idx);
+    	        if ( $c->nodeType == XML_ELEMENT_NODE &&
+    	             $c->localName == 'complexType' &&
+    	             in_array($c->namespaceURI,$ns_list)
+    	           ) {
+    	            $complexTypeNode = $c;
+    	            $idx = $l;   	
+    	        }
+    	    }
+        }
+    	 if ($complexTypeNode === null) {
+    	     $e = VWP::raiseWarning('Sequence not found! Declaration does not allow child nodes!',__CLASS__,null,false);
+    	     return $e;
+    	 }
+    	     	 
+        $sequenceNode = $this->getSequenceDecl($complexTypeNode);
+        return $sequenceNode;    	    	 
+    }
+
+    /**
+     * Process the Schema
+     * 
+     * @param boolean $refresh Refresh any items in the Cache
+     * @access public
+     */
     
-    public function processSchema($refresh = false) {
-       
+    public function processSchema($refresh = false) 
+    {
+              
        $this->_imported = array();
        $nsList = self::getKnownSchemaNamespaces();
        
@@ -575,8 +952,17 @@ class VSchema extends VObject {
        
         $this->_processed = true;
     }
-                 
-    public static function &getSchema($url,$refresh = false) {
+
+    /**
+     * Get a Schema
+     * 
+     * @param string $url Schema URL
+     * @param boolean $refresh Refresh Cache
+     * @access public
+     */
+    
+    public static function &getSchema($url,$refresh = false) 
+    {
                         
         if (!isset(self::$_vfile)) {
             $tmp = new VSchema;
@@ -644,12 +1030,28 @@ class VSchema extends VObject {
         self::$_cache[$url] = new VSchema($doc,$url,$filename,$refresh);
         return self::$_cache[$url];      
     }
-     
-    public static function getCachePath() {                        
+
+    /**
+     * Get Cache Path
+     * 
+     * @return string Cache path
+     * @access public
+     */
+    
+    public static function getCachePath() 
+    {                        
         return VWP::getVarPath('vwp').DS.'xml'.DS.'cache'.DS.'schema';        
     }
 
-    function expireByFilename($name) {
+    /**
+     * Remove file from cache
+     * 
+     * @param string $name Cache Filename
+     * @access public
+     */
+    
+    function expireByFilename($name) 
+    {
         $cachePath = self::getCachePath();
         self::$_vfile->delete($cachePath.DS.$name);
         $entries = self::$_index->getElementsByTagName('cache');
@@ -670,38 +1072,67 @@ class VSchema extends VObject {
         }        
     }
 
-    public static function knownSchemaNamespaces() {
-        return array('http://www.w3.org/2001/XMLSchema');    
+    /**
+     * Return Known Schema Namespaces
+     *
+     * @return array Known schema namespaces
+     * @access public
+     */
+    
+    public static function knownSchemaNamespaces() 
+    {
+    	$known = self::getKnownSchemaNamespaces();
+    	return array_keys($known);           
     }
 
-    public function gc() {
+    /**
+     * Execute Garbage Collection
+     * 
+     * @return boolean|object True on success, error or warning otherwise
+     * @access public
+     */
+    
+    public function gc() 
+    {
         if (!isset(self::$_vfile)) {
             self::$_vfile =& v()->filesystem()->file();
         }
+        
         if (!isset(self::$_vfolder)) {
             self::$_vfolder =& v()->filesystem()->folder();
-        }            
-          $t = time();
-          $cachePath = self::getCachePath();
-          $files = self::$_vfolder->folders($cachePath);
-          if (VWP::isWarning($files)) {
-              return $files;
-          }   
+        }
+                    
+        $t = time();
+        $cachePath = self::getCachePath();
+        $files = self::$_vfolder->folders($cachePath);
+        if (VWP::isWarning($files)) {
+            return $files;
+        }   
           
-          foreach($files as $name) {
-              if ($name != 'cache_index.xml') {
+        foreach($files as $name) {
+            if ($name != 'cache_index.xml') {
                 $mt = self::$_vfile->getMTime($cachePath.DS.$name);
                 if (!VWP::isWarning($mt)) {
-                      if (($mt + $this->timeout) < $t) {
-                            $this->expireByFilename($name);
-                       }                  
+                    if (($mt + $this->timeout) < $t) {
+                          $this->expireByFilename($name);
+                    }                  
                 }                      
             }          
         }
-        self::$_gc_flag = true;                  
+        
+        self::$_gc_flag = true;
+
+        return true;
     }     
 
-    public static function reloadIndex() {
+    /**
+     * Reload Cache Index
+     * 
+     * @access public
+     */
+    
+    public static function reloadIndex() 
+    {
         $cachePath = self::getCachePath();
         $indexFile = $cachePath.DS.'cache_index.xml';
         if (!self::$_vfile->exists($indexFile)) {
@@ -727,7 +1158,15 @@ class VSchema extends VObject {
         }        
     }
 
-    public static function saveIndex() {
+    /**
+     * Save Cache Index
+     * 
+     * @return boolean|object True on success, error or warning otherwise
+     * @access public
+     */
+    
+    public static function saveIndex() 
+    {
         $cachePath = self::getCachePath();
         v()->filesystem()->folder()->create($cachePath);
         
@@ -740,6 +1179,220 @@ class VSchema extends VObject {
         return $result;
     }
 
+    /**
+     * Parse Qualified Name
+     * 
+     * Returned object has 3 properties:
+     * 
+     * <ul>
+     *  <li>prefix 
+     *  <li>namespaceURI
+     *  <li>localName
+     * </ul>
+     * 
+     * @param object $node Reference Node
+     * @param string $qualifiedName Qualfied Name
+     * @return object Qualified Name Info
+     */
+    
+	function parseQualifiedName($node,$qualifiedName) 
+	{
+		$ret = new stdClass;
+		
+		$ret->prefix = null;
+		$ret->namespaceURI = null;
+		$ret->localName = null;
+				
+		$parts = explode(':',(string)$qualifiedName);
+						
+	    if (count($parts) == 2) {
+	    	$ret->prefix = (string)$parts[0];
+	    	$ret->localName = (string)$parts[1];
+	    	$ret->namespaceURI = (string)$node->lookupNamespaceURI($ret->prefix);	    	  
+	    } else {
+	    	$ret->localName = (string)$qualifiedName;	    	
+	    	$ret->namespaceURI = (string)$node->namespaceURI;	    	
+	    }
+
+	    return $ret;
+	}
+    
+	/**
+	 * Get the Type Declaration Node of an element declaration
+	 * 	 	 
+	 * @param object $schemaElementRef Element declaration node
+	 * @return object Type Declaration Node on success, error or warning otherwise
+	 * @access public
+	 */
+	
+    function getElementTypeDecl($schemaElementRef) 
+    {
+    	
+        $elementDecl = $this->getElementDecl($schemaElementRef);
+
+        if (VWP::isWarning($elementDecl)) {
+        	return $elementDecl;
+        }        
+        
+        if ($elementDecl->hasAttribute('type')) {
+            $nameInfo = $this->parseQualifiedName($elementDecl, $elementDecl->getAttribute('type'));
+            $typeDecl = $this->getGlobalTypeDecl($nameInfo->namespaceURI,$nameInfo->localName);                            
+            return $typeDecl;
+        } else {
+        	$len = $elementDecl->childNodes->length;
+        	for($idx=0;$idx<$len;$idx++) {
+        		$item = $elementDecl->childNodes->item($idx);
+        		if ($item->nodeType == XML_ELEMENT_NODE 
+        		    && in_array((string)$item->namespaceURI,array_keys(self::getKnownNamespaces()))
+        		   ) {
+        		     if ('simpleType' == (string)$item->localName) {
+        		     	return $item;
+        		     }
+        		     if ('complexType' == (string)$item->localName) {
+                         return $item;
+        		     }        		       	
+        		}        		    
+        	}        	
+        }
+                     
+        // Undefined Type        
+        return VWP::raiseWarning('Element type declaration not found!',__CLASS__,null,false);         
+    }	
+	
+    /**
+     * Test if provided element declaration is a simpleType 
+     * 
+     * @param object $schemaElementRef Element Declaration Node
+     * @return boolean True if element declaration type is a simpleType
+     * @access public
+     */
+    
+    function isSimpleType($schemaElementRef) 
+    {
+    	
+        $elementDecl = $this->getElementDecl($schemaElementRef);
+
+        if (VWP::isWarning($elementDecl)) {        	        
+        	return false;
+        }        
+        
+        if ($elementDecl->hasAttribute('type')) {
+            $nameInfo = $this->parseQualifiedName($elementDecl, $elementDecl->getAttribute('type'));
+            $typeDecl = $this->getGlobalTypeDecl($nameInfo->namespaceURI,$nameInfo->localName);
+            if (VWP::isWarning($typeDecl)) {                
+                return false;	
+            }
+            
+            return 'simpleType' == (string)$typeDecl->localName;
+             	
+        } else {
+        	$len = $elementDecl->childNodes->length;
+        	for($idx=0;$idx<$len;$idx++) {
+        		$item = $elementDecl->childNodes->item($idx);
+        		if ($item->nodeType == XML_ELEMENT_NODE 
+        		    && in_array((string)$item->namespaceURI,array_keys(self::getKnownNamespaces()))
+        		   ) {
+        		     if ('simpleType' == (string)$item->localName) {
+        		     	return true;
+        		     }
+        		     if ('complexType' == (string)$item->localName) {
+        		     	return false;
+        		     }        		       	
+        		}        		    
+        	}        	
+        }
+        
+        // Undefined Type        
+        return false;         
+    }
+
+    /**
+     * Test if provided element declaration is a complexType 
+     * 
+     * @param object $schemaElementRef Element Declaration Node
+     * @return boolean True if element declaration type is a complexType
+     * @access public
+     */
+        
+    function isComplexType($schemaElementRef) 
+    {
+    	
+        $elementDecl = $this->getElementDecl($schemaElementRef);
+
+        if (VWP::isWarning($elementDecl)) {
+        	return false;
+        }        
+        
+        if ($elementDecl->hasAttribute('type')) {
+            $nameInfo = $this->parseQualifiedName($elementDecl, $elementDecl->getAttribute('type'));
+            $typeDecl = $this->getGlobalTypeDecl($nameInfo->namespaceURI,$nameInfo->localName);
+            if (VWP::isWarning($typeDecl)) {                
+                return false;	
+            }
+            
+            return 'complexType' == (string)$typeDecl->localName;
+             	
+        } else {
+        	$len = $elementDecl->childNodes->length;
+        	for($idx=0;$idx<$len;$idx++) {
+        		$item = $elementDecl->childNodes->item($idx);
+        		if ($item->nodeType == XML_ELEMENT_NODE 
+        		    && in_array((string)$item->namespaceURI,array_keys(self::getKnownNamespaces()))
+        		   ) {
+        		     if ('simpleType' == (string)$item->localName) {
+        		     	return false;
+        		     }
+        		     if ('complexType' == (string)$item->localName) {
+        		     	return true;
+        		     }        		       	
+        		}        		    
+        	}        	
+        }
+        
+        // Undefined Type        
+        return false;         
+    }
+    
+    /**
+     * Test if provided element declaration is a complexType with simple content 
+     * 
+     * @param object $schemaElementRef Element Declaration Node
+     * @return boolean True if element declaration type is a complexType with simple content
+     * @access public
+     */    
+    
+    function hasSimpleContent($schemaElementRef) 
+    {
+    	
+        $typeDecl = $this->getElementTypeDecl($schemaElementRef);
+        if (VWP::isWarning($typeDecl)) {
+        	return false;
+        }
+        
+        $schemaNSList = $this->getKnownSchemaNamespaces();
+        
+        if ('complexType' == (string) $typeDecl->localName) {
+        	$len = $typeDecl->childNodes->length;
+        	for($idx=0;$idx<$len;$idx++) {
+        		$item = $typeDecl->childNodes->item($idx);
+        		if ($item->nodeType == XML_ELEMENT_NODE 
+        		    && in_array((string)$item->namespaceURI,array_keys($schemaNSList))
+        		    && 'simpleContent' == (string)$item->localName) {
+        		    	return true;
+        		}        		
+        	}
+        }
+
+        // Undefined Type        
+        return false;         
+    }
+        
+    /**
+     * Class Destructor
+     * 
+     * @access public
+     */
+    
     function __destruct() {
         
         if (!self::$_gc_flag) {
@@ -753,8 +1406,19 @@ class VSchema extends VObject {
             
         parent::__destruct();
     }
-        
-    function __construct($schemaDoc = null,$source = null, $cacheFile = null,$refresh = false) {
+
+    /**
+     * Class Constructor
+     * 
+     * @param object $schemaDoc Schema Document
+     * @param string $source Source
+     * @param string $cacheFile Cache File
+     * @param boolean $refresh Refresh cache
+     * @access public
+     */
+    
+    function __construct($schemaDoc = null,$source = null, $cacheFile = null,$refresh = false) 
+    {
         parent::__construct();
         
         $doProcess = false;
@@ -783,10 +1447,8 @@ class VSchema extends VObject {
         
         if ($doProcess) {
             $this->processSchema($refresh);
-        }       
-        
+        }               
     }
+    
+    // end class VSchema
 }
-
-
-

@@ -1,6 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ref>
- <title>Vertical Menu</title>
- <name></name>
- <menu>admin_leftmenu</menu>
- </ref>
+<?xml version="1.0"?>
+<widget_reference xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://standards.vnetpublishing.com/schemas/vwp/2011/02/WidgetReference" xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2011/02/WidgetReference http://standards.vnetpublishing.com/schemas/vwp/2011/02/WidgetReference/">
+ <widget/>
+ <params>
+  <param name="title">Vertical Menu</param>
+  <param name="#text">
+ </param>
+  <param name="name"></param>
+  <param name="menu">admin_leftmenu</param></params>
+</widget_reference>

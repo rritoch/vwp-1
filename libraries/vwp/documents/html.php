@@ -102,13 +102,6 @@ class HTMLDocument extends VDocument
      */
    
     public $document_title;
-
-    /**
-     * @var string $theme_path Theme path
-     * @access public
-     */ 
- 
-    public $theme_path;
  
     /**
      * @var boolean $is_xhtml Is XHTML Document

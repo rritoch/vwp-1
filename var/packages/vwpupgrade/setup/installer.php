@@ -3,10 +3,10 @@
 VWP::RequireLibrary('vwp.archive.installer');
 
 /**
- * Base installer 1.0.1
+ * Base installer 1.0.2
  */
 
-class VWPUpgrade_1_0_1_Base extends VInstaller 
+class VWPUpgrade_1_0_2_Base extends VInstaller 
 {
 
     /**     
@@ -141,7 +141,7 @@ class VWPUpgrade_1_0_1_Base extends VInstaller
  function __construct() {
   
   $this->setAppId("vwpupgrade");
-  $this->setBaseVersion(array(1,0,1));   
+  $this->setBaseVersion(array(1,0,2));   
   $this->setName("VWPUpgrade");          
   $this->setAuthor("Ralph Ritoch");
   $this->setWebsite("VNetPublishing.Com","http://www.vnetpublishing.com");
@@ -150,10 +150,10 @@ class VWPUpgrade_1_0_1_Base extends VInstaller
 }
 
 /**
- * Version installer 1.0.1
+ * Version installer 1.0.2
  */
 
-class VWPUpgrade_1_0_1_Sub_1_0_1 extends VWPUpgrade_1_0_1_Base 
+class VWPUpgrade_1_0_2_Sub_1_0_2 extends VWPUpgrade_1_0_2_Base 
 {
 	
 	function initDB() 
@@ -173,16 +173,17 @@ class VWPUpgrade_1_0_1_Sub_1_0_1 extends VWPUpgrade_1_0_1_Base
   function installSubPackages() 
   {
        $subPackages = array(
-           "vwp-1.0.1-1295304190.zip",
-           "vwebshell-1.0.1-1295296676.zip",
-           "user-1.0.1-1295291734.zip",
-           "tinymce-1.0.1-1295291417.zip",
-           "thememgr-1.0.1-1295290865.zip",           
-           "menumgr-1.0.1-1295297016.zip",
-           "menu-1.0.1-1295290178.zip",
-           "content-1.0.1-1295289955.zip",
-           "admin_theme_default-1.0.1-1295292388.zip",
-           "site_theme_default-1.0.1-1295292667.zip",           
+           "vwp-1.0.2-1299451794.zip",
+           "vwebshell-1.0.2-1299449606.zip",
+           "user-1.0.2-1299449667.zip",           
+           "menu-1.0.2-1299449847.zip",
+           "menumgr-1.0.2-1299449997.zip",           
+           "tinymce-1.0.2-1299449766.zip",
+           "thememgr-1.0.2-1299445955.zip",           
+           "content-1.0.2-1299438400.zip",
+           "search-1.0.2-1299442018.zip",
+           "admin_theme_default-1.0.2-1299446024.zip",
+           "site_theme_default-1.0.2-1299446137.zip",           
        );
        
        $src_path = $this->getSourcePath().DS.'base'.DS.'packages';
@@ -263,8 +264,8 @@ class VWPUpgrade_1_0_1_Sub_1_0_1 extends VWPUpgrade_1_0_1_Base
  function __construct() {
    // register previous version   
    
-   $this->setVersion(array(1,0,1));   
-   $this->setReleaseDate("January 17, 2011");
+   $this->setVersion(array(1,0,2));   
+   $this->setReleaseDate("March 6, 2011");
    parent::__construct();
  }
    
@@ -276,7 +277,7 @@ class VWPUpgrade_1_0_1_Sub_1_0_1 extends VWPUpgrade_1_0_1_Base
  * Interface class
  */
   
-class VWPUpgrade_1_0_1_Installer  extends VWPUpgrade_1_0_1_Sub_1_0_1 {
+class VWPUpgrade_1_0_2_Installer  extends VWPUpgrade_1_0_2_Sub_1_0_2 {
  // interface class
 }
 

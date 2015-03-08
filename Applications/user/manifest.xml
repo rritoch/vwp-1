@@ -7,7 +7,7 @@
  <author>Ralph Ritoch</author>
  <author_link>http://www.vnetpublishing.com</author_link>
  <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
- <version>1.0.1</version>
+ <version>1.0.2</version>
  <version_start_date></version_start_date>
  <version_release_date></version_release_date>
  <install />  
@@ -17,7 +17,11 @@
  <folder name="setup" version="1.0.1">
   <file>/installer.php</file>
   <file>/index.html</file>
- </folder> 
+ </folder>
+ <folder name="setup" version="1.0.2">
+  <file>/installer.php</file>
+  <file>/index.html</file>
+ </folder>   
  <folder name="base" version="1.0.0">
   <file>/preinstall.php</file>
   <file>/manifest.xml</file>
@@ -55,6 +59,112 @@
   <file>/widgets/settings/layouts/html/default.php</file> 
  </folder>
  <folder name="base" version="1.0.1">
+  <file>/preinstall.php</file>
+  <file>/manifest.xml</file>
+  <file>/events/auth/admin.php</file>
+  <file>/events/auth/user.php</file>
+  <file>/events/user/admin.php</file>
+  <file>/events/user/user.php</file>
+  <file>/events/session/admin.php</file>
+  <file>/models/user.php</file>
+  <file>/user.php</file>
+  <file>/widgets/admin/admin.php</file>
+  <file>/widgets/admin/layouts/html/default.php</file>
+  <file>/widgets/admin/models/admin.php</file>
+  <file>/widgets/admin/widgets/admin/admin.php</file>
+  <file>/widgets/admin/widgets/admin/layouts/html/default.php</file>
+  <file>/widgets/admin/widgets/menu/layouts/html/default.php</file>
+  <file>/widgets/admin/widgets/menu/layouts/html/footer.php</file>
+  <file>/widgets/admin/widgets/menu/layouts/xml/default.php</file>
+  <file>/widgets/admin/widgets/menu/menu.php</file>
+  <file>/widgets/admin/widgets/users/layouts/html/default.php</file>
+  <file>/widgets/admin/widgets/users/layouts/html/edit.php</file>
+  <file>/widgets/admin/widgets/users/layouts/html/register.php</file>
+  <file>/widgets/admin/widgets/users/users.php</file>
+  <file>/widgets/login/layouts/html/default.php</file>
+  <file>/widgets/login/login.php</file>
+  <file>/widgets/login/login_service.php</file>
+  <file>/widgets/login/login_service.xml</file>
+  <file>/widgets/login/layouts/wsdl/default.php</file>  
+  <file>/widgets/new/layouts/html/default.php</file>
+  <file>/widgets/new/new.php</file>
+  <file>/widgets/user/layouts/html/curuser.php</file>
+  <file>/widgets/user/layouts/html/default.php</file>
+  <file>/widgets/user/user.php</file>
+  <file>/widgets/user/layouts/xml/curuser.php</file>
+  <file>/widgets/user/layouts/xml/default.php</file>
+  <file>/widgets/user/layouts/xsl/curuser.php</file>
+  <file>/widgets/user/layouts/xsl/default.php</file>         
+  <file>/widgets/settings/settings.php</file>
+  <file>/widgets/settings/layouts/html/default.php</file>  
+  <file>/widgets/confirm/confirm.php</file>
+  <file>/widgets/confirm/layouts/html/confirm_html.php</file>
+  <file>/widgets/confirm/layouts/html/confirm_text.php</file>
+  <file>/widgets/confirm/layouts/html/default.php</file>
+  <file>/widgets/new/layouts/html/confirm_html.php</file>
+  <file>/widgets/new/layouts/html/confirm_text.php</file>
+  <file>/widgets/new/layouts/html/success.php</file>
+  <file>/widgets/new/layouts/html/welcome_html.php</file>
+  <file>/widgets/new/layouts/html/welcome_text.php</file>
+  <file>/widgets/remind/layouts/html/account_info_html.php</file>
+  <file>/widgets/remind/layouts/html/account_info_text.php</file>
+  <file>/widgets/remind/layouts/html/default.php</file>
+  <file>/widgets/remind/layouts/html/password_reset_html.php</file>
+  <file>/widgets/remind/layouts/html/password_reset_text.php</file>
+  <file>/widgets/remind/remind.php</file>
+  <file>/widgets/reset/layouts/html/complete.php</file>
+  <file>/widgets/reset/layouts/html/default.php</file>
+  <file>/widgets/reset/layouts/html/expired.php</file>
+  <file>/widgets/reset/reset.php</file>
+  <file>/events/auth/index.html</file>
+  <file>/events/index.html</file>
+  <file>/events/session/index.html</file>
+  <file>/events/user/index.html</file>
+  <file>/index.html</file>
+  <file>/models/index.html</file>
+  <file>/widgets/admin/index.html</file>
+  <file>/widgets/admin/layouts/html/index.html</file>
+  <file>/widgets/admin/layouts/index.html</file>
+  <file>/widgets/admin/models/index.html</file>
+  <file>/widgets/admin/widgets/admin/index.html</file>
+  <file>/widgets/admin/widgets/admin/layouts/html/index.html</file>
+  <file>/widgets/admin/widgets/admin/layouts/index.html</file>
+  <file>/widgets/admin/widgets/index.html</file>
+  <file>/widgets/admin/widgets/menu/index.html</file>
+  <file>/widgets/admin/widgets/menu/layouts/html/index.html</file>
+  <file>/widgets/admin/widgets/menu/layouts/index.html</file>
+  <file>/widgets/admin/widgets/menu/layouts/xml/index.html</file>
+  <file>/widgets/admin/widgets/users/index.html</file>
+  <file>/widgets/admin/widgets/users/layouts/html/index.html</file>
+  <file>/widgets/admin/widgets/users/layouts/index.html</file>
+  <file>/widgets/confirm/index.html</file>
+  <file>/widgets/confirm/layouts/html/index.html</file>
+  <file>/widgets/confirm/layouts/index.html</file>
+  <file>/widgets/index.html</file>
+  <file>/widgets/login/index.html</file>
+  <file>/widgets/login/layouts/html/index.html</file>
+  <file>/widgets/login/layouts/index.html</file>
+  <file>/widgets/login/layouts/wsdl/index.html</file>
+  <file>/widgets/new/index.html</file>
+  <file>/widgets/new/layouts/html/index.html</file>
+  <file>/widgets/new/layouts/index.html</file>
+  <file>/widgets/remind/index.html</file>
+  <file>/widgets/remind/layouts/html/index.html</file>
+  <file>/widgets/remind/layouts/index.html</file>
+  <file>/widgets/reset/index.html</file>
+  <file>/widgets/reset/layouts/html/index.html</file>
+  <file>/widgets/reset/layouts/index.html</file>
+  <file>/widgets/settings/index.html</file>
+  <file>/widgets/settings/layouts/html/index.html</file>
+  <file>/widgets/settings/layouts/index.html</file>
+  <file>/widgets/user/index.html</file>
+  <file>/widgets/user/layouts/html/index.html</file>
+  <file>/widgets/user/layouts/index.html</file>
+  <file>/widgets/user/layouts/xml/index.html</file>
+  <file>/widgets/user/layouts/xsl/index.html</file>
+ </folder>
+ 
+  <folder name="base" version="1.0.2">
   <file>/preinstall.php</file>
   <file>/manifest.xml</file>
   <file>/events/auth/admin.php</file>

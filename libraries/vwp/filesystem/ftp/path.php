@@ -185,8 +185,7 @@ class VFTPPath extends VPath
 
     /**
      * Test if path is absolute
-     *
-     * @todo Implement isAbsolute()
+     *     
      * @param string $path Path to test  
      * @return boolean True if path is absolute
      * @access public      

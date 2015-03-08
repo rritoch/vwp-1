@@ -157,6 +157,29 @@ class VDocument extends VObject
     public $screens = array(); 
 
     /**
+     * Theme Path
+     */
+    
+    protected $theme_path;
+
+    
+    function getThemePath() 
+    {
+            $themeName = VWP::getTheme();      
+            $themeType = VWP::getThemeType();
+  
+            $theme_path = VPATH_BASE.DS.'themes'.DS.$themeType.DS.$themeName;   
+            $base = VPATH_BASE;
+   
+            if (substr($theme_path,0,strlen($base)) == $base) {
+                $this->theme_path = VURI::base() . v()->filesystem()->path()->clean(substr($theme_path,strlen($base)),"/");
+            } else {
+                $this->theme_path = '';
+            }
+            return $this->theme_path;    	
+    }
+    
+    /**
      * Set Meta Data
      */
     
@@ -457,6 +480,26 @@ class VDocument extends VObject
         $this->debug_notices = VWP::getDebugNotices(); 
     }
  
+    /**
+     * Get Property
+     * 
+     * @param string $name Name
+     * @param mixed $default Default
+     * @access public
+     */
+    
+    function &get($name,$default = null)
+    {
+        switch($name) {
+        	case "theme_path":
+        		$ret = $this->getThemePath();
+        		break;
+        	default:
+        		$ret = parent::get($name,$default);
+        		break;
+        }
+    	return $ret;
+    }
     /**
      * Class constructor
      * 

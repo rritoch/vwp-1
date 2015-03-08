@@ -4,10 +4,10 @@ VWP::RequireLibrary('vwp.archive.installer');
 VWP::RequireLibrary('vwp.sys.registry');
 
 /**
- * Base installer 1.0.1
+ * Base installer 1.0.2
  */
 
-class Content_1_0_1_Base extends VInstaller {
+class Content_1_0_2_Base extends VInstaller {
 
  function process($mode) {
   $this->base_mode = $mode;      
@@ -53,7 +53,7 @@ class Content_1_0_1_Base extends VInstaller {
  function __construct() {
   
   $this->setAppId("content");
-  $this->setBaseVersion(array(1,0,1));   
+  $this->setBaseVersion(array(1,0,2));   
   $this->setName("Content");          
   $this->setAuthor("Ralph Ritoch");
   $this->setWebsite("VNetPublishing.Com","http://www.vnetpublishing.com");
@@ -65,7 +65,7 @@ class Content_1_0_1_Base extends VInstaller {
  * Version installer 1.0.1
  */
 
-class Content_1_0_1_Sub_1_0_1 extends Content_1_0_1_Base {
+class Content_1_0_2_Sub_1_0_1 extends Content_1_0_2_Base {
  
      
  /**
@@ -172,9 +172,129 @@ class Content_1_0_1_Sub_1_0_1 extends Content_1_0_1_Base {
 
 
 /**
+ * Version installer 1.0.2
+ */
+
+class Content_1_0_2_Sub_1_0_2 extends Content_1_0_2_Base {
+ 
+     
+ /**
+  * Version install method
+  * 
+  * @access public      
+  */     
+
+ function version_install() {
+        
+  $tasks = array('initDB',
+                 'copyfiles',
+                 'installEvents',
+                 'installMenuLinks');
+  
+  $applinks = array();
+  
+  $applinks[] = array(
+    "type"=>"applink",
+    "text"=>'Content Configuration',
+    "widget"=>'content.admin'  
+  );
+
+  $applinks[] = array(
+    "type"=>"applink",
+    "text"=>'Article Categories',
+    "widget"=>'content.catmgr'  
+  );
+  
+  $applinks[] = array(
+    "type"=>"applink",
+    "text"=>'Article Manager',
+    "widget"=>'content.articlemgr'  
+  );    
+  
+  $this->setMenuLinks('app_admin',$applinks);
+  
+  $base = dirname(dirname(__FILE__)).DS.'base'.DS.'events';
+  
+  $events = array(
+   array( // user/admin
+    "type"=>"search",
+    "id"=>"content",
+    "filename"=>$base.DS.'search'.DS.'content.php'),    
+  );
+  
+  $this->setEvents($events);
+  
+  $result = $this->runAll($tasks);
+     
+  $this->finish($result);
+  return $result;  
+ }
+ 
+ /**
+  * Version uninstall method
+  * 
+  * @access public      
+  */     
+
+ function version_uninstall() {
+        
+  $tasks = array('uninitDB',
+                 'deletefiles',
+                 'uninstallEvents',
+                 'uninstallMenuLinks');
+  
+  $applinks = array();
+  
+  $applinks[] = array(
+    "type"=>"applink",
+    "text"=>'Content Configuration',
+    "widget"=>'content.admin'  
+  );
+
+  $applinks[] = array(
+    "type"=>"applink",
+    "text"=>'Article Categories',
+    "widget"=>'content.catmgr'  
+  );
+  
+  $applinks[] = array(
+    "type"=>"applink",
+    "text"=>'Article Manager',
+    "widget"=>'content.articlemgr'  
+  );    
+  
+  $this->setMenuLinks('app_admin',$applinks);
+  
+  //$base = dirname(dirname(__FILE__)).DS.'base'.DS.'events';
+  $evtBase = VWP::getVarPath('vwp').DS.'events';
+  
+  $events = array(
+   array( // user/admin
+    "type"=>"search",
+    "id"=>"content",
+    "filename"=>$evtBase.DS.'search'.DS.'content.php'),  
+  );
+  
+  $this->setEvents($events);
+  
+  $result = $this->runAll($tasks);
+     
+  $this->finish($result);
+  return $result;  
+ }
+ 
+ function __construct() {
+   $this->setVersion(array(1,0,2));   
+   $this->setReleaseDate("February 8, 2011");
+   parent::__construct();
+ }
+   
+} // end class
+
+/**
  * Interface class
  */
   
-class Content_1_0_1_Installer  extends Content_1_0_1_Sub_1_0_1 {
+class Content_1_0_2_Installer  extends Content_1_0_2_Sub_1_0_2 {
  // interface class
 }

@@ -160,7 +160,7 @@ class Menumgr_Widget_Menumgr extends VWidget
   
         $this->setLayout('edit');
 
-        $screen =& $shellob->getScreen();
+        $screen = $shellob->getScreen();
         $this->assignRef('screen',$screen);  
   
         parent::display($tpl);

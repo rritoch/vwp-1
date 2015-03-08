@@ -53,11 +53,17 @@ body {
  padding: 0px 5px;  
 }
   
-#menubar { 
+#menubar {    
  margin: 30px 5px 0px 5px;
  height: 35px;   
- width: auto;  
-}  
+ width: auto;
+ clear: both;  
+}
+
+#menubar ul {
+ display: inline-block;
+ float: left;
+}
 #footer {
   clear: both;
   text-align: center;

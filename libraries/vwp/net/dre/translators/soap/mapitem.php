@@ -29,8 +29,9 @@
  * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License    
  */
  
-class VSOAPVWPType_mapitemtype extends VType 
+class VSOAPVWPType_mapitemtype
 {
+	
 	/**
 	 * Key
 	 * 	 

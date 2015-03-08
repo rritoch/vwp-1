@@ -279,9 +279,7 @@ class UserEventUser extends VEvent {
  
  function onFind($credentials,&$result) {
 
-  if (!isset($credentials["username"])) {
-   return false;
-  }
+
 
   if ((isset($credentials["domain"])) && ($credentials["domain"] !== null)) {
    return false;
@@ -305,6 +303,32 @@ class UserEventUser extends VEvent {
    return $table;
   }
 
+  if (!isset($credentials["username"])) {
+      if (!isset($credentials["email"])) { 
+           return false;
+      }
+      // Email search
+      
+      $filter = $table->createFilter();
+      $filter->addCondition("email","=",$credentials["email"]);  
+      $m = $table->getMatches($filter);
+      if (count($m) > 0) {
+      	  if (!is_array($result)) {
+      	      $result = array();
+      	  }
+      	  $ulist = array();
+          foreach($m as $id) {
+          	$row =& $table->getRow($id);
+          	$ulist[] = $row->get('username');
+          }
+          $result = array_merge($ulist,$result);
+          return $result;	
+      } else {
+          return false;
+      }
+      
+  }  
+  
   $filter = $table->createFilter();
   $filter->addCondition("username","=",$credentials["username"]);  
   $m = $table->getMatches($filter);

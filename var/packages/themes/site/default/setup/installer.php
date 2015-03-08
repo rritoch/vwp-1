@@ -3,10 +3,10 @@
 VWP::RequireLibrary('vwp.archive.installer');
 
 /**
- * Base installer 1.0.1
+ * Base installer 1.0.2
  */
 
-class Site_Default_1_0_1_Base extends VInstaller {
+class Site_Default_1_0_2_Base extends VInstaller {
 	
 	
  function process($mode) {
@@ -53,7 +53,7 @@ class Site_Default_1_0_1_Base extends VInstaller {
   
   $this->setThemeId("default");
   $this->setThemeType("site");
-  $this->setBaseVersion(array(1,0,1));   
+  $this->setBaseVersion(array(1,0,2));   
   $this->setName("Default");          
   $this->setAuthor("Ralph Ritoch");
   $this->setWebsite("VNetPublishing.Com","http://www.vnetpublishing.com");
@@ -62,10 +62,10 @@ class Site_Default_1_0_1_Base extends VInstaller {
 }
 
 /**
- * Version installer 1.0.1
+ * Version installer 1.0.2
  */
 
-class Site_Default_1_0_1_Sub_1_0_1 extends Site_Default_1_0_1_Base {
+class Site_Default_1_0_2_Sub_1_0_2 extends Site_Default_1_0_2_Base {
  
   /**
    * Version install method
@@ -117,8 +117,8 @@ class Site_Default_1_0_1_Sub_1_0_1 extends Site_Default_1_0_1_Base {
 
 
  function __construct() {
-   $this->setVersion(array(1,0,1));   
-   $this->setReleaseDate("January 17, 2011");
+   $this->setVersion(array(1,0,2));   
+   $this->setReleaseDate("March 6, 2011");
    parent::__construct();
  }
    
@@ -129,6 +129,6 @@ class Site_Default_1_0_1_Sub_1_0_1 extends Site_Default_1_0_1_Base {
  * Interface class
  */
   
-class Site_Default_1_0_1_Installer  extends Site_Default_1_0_1_Sub_1_0_1 {
+class Site_Default_1_0_2_Installer  extends Site_Default_1_0_2_Sub_1_0_2 {
  // interface class
 }

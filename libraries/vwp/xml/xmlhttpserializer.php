@@ -34,7 +34,7 @@ class VXMLHTTPSerializer extends VObject
 	 * 
 	 * @param object $doc Document
 	 * @param mixed $val Value
-	 * @access public
+	 * @access private
 	 */
 	
     private function _value2Node($doc,$val) 
@@ -141,7 +141,8 @@ class VXMLHTTPSerializer extends VObject
      * @access public
      */
     
-    public static function transformRequestArgs($xslDoc) {
+    public static function transformRequestArgs($xslDoc) 
+    {
         $proc = new XSLTProcessor();
         $proc->importStylesheet($xslDoc);
         $xmlDoc = self::getRequest();

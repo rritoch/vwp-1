@@ -642,7 +642,6 @@ class VMysqlQuery extends VMysqlDatabase
     	
     	$sz = count($table_id_list);
     	
-    	//print_r($this->tableRelationships);
     	
     	for($ridx = 1; $ridx < $sz; $ridx++) {
     		$lidx = $ridx - 1;
@@ -733,9 +732,9 @@ class VMysqlQuery extends VMysqlDatabase
     	         . $limit;  
       
         //VWP::raiseWarning($query,__CLASS__);              	    	
-    	$this->setQuery($query);
-    	
-    	return parent::query();
+    	$this->setQuery($query);    	    	
+    	$result = parent::query();
+    	return $result;    	
     }
     
     /**
@@ -883,15 +882,15 @@ class VMysqlQuery extends VMysqlDatabase
     /**
      * Class constructor
      *
-     * @param string $tableName Table name
+     * @param string $databaseName Database name
      * @access public
      */
           
-    function __construct($databaseName = null) 
+    function __construct(&$database) 
     {
         $this->_link = false;
         parent::__construct();
-        $this->_link =& $this->getDatabase($databaseName);
+        $this->bind($database);        
         $this->infilter = new VMysqlQueryFilter;
         $this->outfilter = new VMysqlQueryFilter;  
     }

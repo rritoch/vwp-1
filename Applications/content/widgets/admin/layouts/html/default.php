@@ -3,11 +3,11 @@
 /**
  * VWP Content Manager - Default Configuration Layout
  * 
- * @package    VWP.Content
- * @subpackage Layouts.Configure
+ * @package VWP.Content
+ * @subpackage Layouts.Admin.HTML
  * @author Ralph Ritoch <rritoch@gmail.com>
  * @link http://www.vnetpublishing.com VNetPublishing.Com 
- * @copyright (c) Ralph Ritoch - All rights reserved
+ * @copyright (c) Ralph Ritoch 2011 - All rights reserved
  * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License  
  */
 
@@ -166,6 +166,20 @@
    <td class="data"><select name="home_category_layout"><?php if ($this->config["home_category_layout"] != "blog") { ?><option value="default" selected="selected">Default</option><option value="blog">Blog</option><?php } else { ?><option value="default">Default</option><option value="blog" selected="selected">Blog</option><?php } ?></select></td>
    <td class="vbar"><div class="clr_b"></div></td>
   </tr>
+  <tr class="data">
+   <td class="vbar"><div class="clr_b"></div></td>
+   <td class="label">Images Path:</td>
+   <td class="vbar"><div class="clr_b"></div></td>
+   <td class="data"><input type="text" size="40" name="images_path" value="<?php echo htmlentities($this->config["images_path"]); ?>" /></td>
+   <td class="vbar"><div class="clr_b"></div></td>
+  </tr>   
+  <tr class="data">
+   <td class="vbar"><div class="clr_b"></div></td>
+   <td class="label">Images URL:</td>
+   <td class="vbar"><div class="clr_b"></div></td>
+   <td class="data"><input type="text" size="40" name="images_url" value="<?php echo htmlentities($this->config["images_url"]); ?>" /></td>
+   <td class="vbar"><div class="clr_b"></div></td>
+  </tr>  
  </tbody>
  <tfoot>
   <tr class="controls">

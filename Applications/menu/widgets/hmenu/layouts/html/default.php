@@ -4,7 +4,7 @@
  $links = array();
  
 ?>
-<ul class="hmenu">
+<ul class="hmenu <?php echo htmlentities('hmenu_'.$this->menu_name); ?>">
 <?php foreach($this->cur_menu["_items"] as $item) {  
  if (($item["type"] == "link") || ($item["type"] == "applink")) {
   if ($idx < 1) {

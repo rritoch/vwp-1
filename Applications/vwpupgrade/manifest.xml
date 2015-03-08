@@ -8,29 +8,30 @@
  <author_link>http://www.vnetpublishing.com</author_link>
  <copyright>Copyright Ralph Ritoch 2010 - ALL RIGHTS RESERVED</copyright>
  <license>http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt</license>
- <version>1.0.1</version>
+ <version>1.0.2</version>
  <version_start_date></version_start_date>
  <version_release_date /> 
  <install>
   <extract>local</extract>
  </install>
- <folder name="setup" version="1.0.1">
+ <folder name="setup" version="1.0.2">
   <file>/installer.php</file>
  </folder>
- <folder name="base" version="1.0.1">
+ <folder name="base" version="1.0.2">
   <file>/index.html</file>
   <file>/manifest.xml</file>
-  <file>/packages/admin_theme_default-1.0.1-1295292388.zip</file>
-  <file>/packages/content-1.0.1-1295289955.zip</file>
   <file>/packages/index.html</file>
-  <file>/packages/menu-1.0.1-1295290178.zip</file>
-  <file>/packages/menumgr-1.0.1-1295297016.zip</file>
-  <file>/packages/site_theme_default-1.0.1-1295292667.zip</file>
-  <file>/packages/thememgr-1.0.1-1295290865.zip</file>
-  <file>/packages/tinymce-1.0.1-1295291417.zip</file>
-  <file>/packages/user-1.0.1-1295291734.zip</file>
-  <file>/packages/vwebshell-1.0.1-1295296676.zip</file>
-  <file>/packages/vwp-1.0.1-1295304190.zip</file>
+  <file>/packages/admin_theme_default-1.0.2-1299446024.zip</file>
+  <file>/packages/content-1.0.2-1299438400.zip</file>
+  <file>/packages/menu-1.0.2-1299449847.zip</file>
+  <file>/packages/menumgr-1.0.2-1299449997.zip</file>
+  <file>/packages/search-1.0.2-1299442018.zip</file>
+  <file>/packages/site_theme_default-1.0.2-1299446137.zip</file>
+  <file>/packages/thememgr-1.0.2-1299445955.zip</file>
+  <file>/packages/tinymce-1.0.2-1299449766.zip</file>
+  <file>/packages/user-1.0.2-1299449667.zip</file>
+  <file>/packages/vwebshell-1.0.2-1299449606.zip</file>
+  <file>/packages/vwp-1.0.2-1299451794.zip</file>
   <file>/vwpupgrade.php</file>
   <file>/widgets/index.html</file>
   <file>/widgets/vwpupgrade/index.html</file>

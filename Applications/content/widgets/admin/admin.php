@@ -1,27 +1,32 @@
 <?php
 
 /**
- * User Configuration Widget
+ * Content Configuration Widget
  *  
- * @package    VWP.User.Admin
+ * @package    VWP.Content
  * @subpackage Widgets
- * @author Ralph Ritoch <rritoch@gmail.com> 
- * @copyright (c) Ralph Ritoch - All rights reserved
- * @link http://www.vnetpublishing.com 
+ * @author Ralph Ritoch <rritoch@gmail.com>
+ * @copyright (c) Ralph Ritoch 2011 - All Rights Reserved
+ * @link http://www.vnetpublishing.com VNetPublishing.Com
+ * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License
+ */
+
+/**
+ * Require Widget Support
  */
 
 VWP::RequireLibrary("vwp.ui.widget");
 
 /**
- * User Configuration Widget 
+ * Content Configuration Widget
  *  
- * @package    VWP.User.Admin
+ * @package    VWP.Content
  * @subpackage Widgets
- * @author Ralph Ritoch <rritoch@gmail.com> 
- * @copyright (c) Ralph Ritoch - All rights reserved
- * @link http://www.vnetpublishing.com 
+ * @author Ralph Ritoch <rritoch@gmail.com>
+ * @copyright (c) Ralph Ritoch 2011 - All Rights Reserved
+ * @link http://www.vnetpublishing.com VNetPublishing.Com
+ * @license http://www.vnetpublishing.com/Legal/Licenses/2010/10/vnetlpl.txt VNETLPL Limited Public License 
  */
-
 
 class Content_Widget_Admin extends VWidget 
 {

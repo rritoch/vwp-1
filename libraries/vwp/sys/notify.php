@@ -15,6 +15,8 @@
 
 class_exists('VWP') || die();
 
+VWP::RequireLibrary('vwp.sys.action');
+
 /**
  * Virtual Web Platform - Notify System
  *  
@@ -74,7 +76,8 @@ class VNotify extends VObject
             self::$events[$cl][$event] = array();
         }
   
-        self::$events[$cl][$event][$id] = new VAction($id,$callback,$event,$eclass);   
+        self::$events[$cl][$event][$id] = new VAction($id,$callback,$event,$eclass);
+   
         return self::$events[$cl][$event][$id];
     }
 
@@ -124,18 +127,20 @@ class VNotify extends VObject
      * @access public        
      */
      
-    public static function Notify($event,$eclass = null) 
+    public static function Notify($event,$eclass = null,$params = array()) 
     {
+  	
         $ctr = 0;
   
         $cl = $eclass;
         if (empty($cl)) {
             $cl = "_";
         }
-  
+
         if (isset(self::$events[$cl][$event])) {
-            foreach($events[$cl][$event] as $id=>$action) {
-                if ($action->doAction()) {
+            foreach(self::$events[$cl][$event] as $id=>$action) {
+                            	
+                if ($action->doAction($params)) {
                     $ctr++;
                 }
             }

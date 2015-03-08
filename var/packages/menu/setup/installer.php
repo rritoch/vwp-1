@@ -3,10 +3,10 @@
 VWP::RequireLibrary('vwp.archive.installer');
 
 /**
- * Base installer 1.0.1
+ * Base installer 1.0.2
  */
 
-class Menu_1_0_1_Base extends VInstaller {
+class Menu_1_0_2_Base extends VInstaller {
 
  function process($mode) {
   $this->base_mode = $mode;      
@@ -52,7 +52,7 @@ class Menu_1_0_1_Base extends VInstaller {
  function __construct() {
   
   $this->setAppId("menu");
-  $this->setBaseVersion(array(1,0,1));   
+  $this->setBaseVersion(array(1,0,2));   
   $this->setName("Menu");          
   $this->setAuthor("Ralph Ritoch");
   $this->setWebsite("VNetPublishing.Com","http://www.vnetpublishing.com");
@@ -64,7 +64,7 @@ class Menu_1_0_1_Base extends VInstaller {
  * Version installer 1.0.1
  */
 
-class Menu_1_0_1_Sub_1_0_1 extends Menu_1_0_1_Base {
+class Menu_1_0_2_Sub_1_0_2 extends Menu_1_0_2_Base {
 
 
  function initDB() {
@@ -138,8 +138,8 @@ class Menu_1_0_1_Sub_1_0_1 extends Menu_1_0_1_Base {
  }
 
  function __construct() {
-   $this->setVersion(array(1,0,1));   
-   $this->setReleaseDate("January 17, 2011");
+   $this->setVersion(array(1,0,2));   
+   $this->setReleaseDate("February 3, 2011");
    parent::__construct();
  }
    
@@ -150,6 +150,6 @@ class Menu_1_0_1_Sub_1_0_1 extends Menu_1_0_1_Base {
  * Interface class
  */
   
-class Menu_1_0_1_Installer  extends Menu_1_0_1_Sub_1_0_1 {
+class Menu_1_0_2_Installer  extends Menu_1_0_2_Sub_1_0_2 {
  // interface class
 }

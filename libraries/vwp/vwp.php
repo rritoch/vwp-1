@@ -5,7 +5,6 @@
  *  
  * This file provides the primary core system interface        
  * 
- * @todo Implement translation layer on HTTP request to better facilitate non-html communication such as SOAP/XForms/etc.
  * @package VWP
  * @subpackage Libraries  
  * @author Ralph Ritoch <rritoch@gmail.com>
@@ -736,27 +735,32 @@ class VWP extends VObject
      * Require a PHP Extension
      * 
      * @param string $ext PHP Extension ID
+     * @param boolean $throw Throw warning on railure
      * @return boolean|object True on success, error or warning otherwise
      * @access public
      */
     
-    public static function RequireExtension($ext) 
+    public static function RequireExtension($ext,$throw = true) 
     {
     	if (($ext == 'mssql') && (version_compare(PHP_VERSION, '5.3.0') >= 0)) {    		
     		$ext = 'sqlsrv';    		
     	}
     	
-        if (!extension_loaded($ext)) {        	
-            self::noWarn();   
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {            	            	
-                $r = @dl('php_' . $ext . '.dll');                     
-            } else {            	
-                $r = @dl($ext.'.so');
-            }
-            self::noWarn(false);    
-            if (!$r) {
-                return VWP::raiseWarning("Extension $ext failed to load",'VWP',null,false);
-            }
+        if (!extension_loaded($ext)) {
+        	if (function_exists('dl')) {        	
+                self::noWarn();   
+                if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {            	            	
+                    $r = @dl('php_' . $ext . '.dll');                     
+                } else {            	
+                    $r = @dl($ext.'.so');
+                }
+                self::noWarn(false);    
+                if (!$r) {
+                    return VWP::raiseWarning("Extension $ext failed to load",'VWP',null,$throw);
+                }
+        	} else {
+        		return VWP::raiseWarning("dl() not supported! Unable to load extension $ext",'VWP',null,$throw);
+        	}
         }
         return true;
     }
@@ -1024,7 +1028,12 @@ class VWP extends VObject
      * @access public    
      */
        
-    function dispatch() {
+    function dispatch() 
+    {
+
+    	if (version_compare(PHP_VERSION, '5.2.4', '>=')) {
+    	    ini_set('display_errors', 1);
+    	}
     	
     	$fs =& $this->filesystem();
     	  
@@ -1050,6 +1059,8 @@ class VWP extends VObject
         
         $sleep_key = VHibernateDriver::wake();
 
+        VEnv::reroute();
+        
         // Prepair output driver (document)
         
         $cfg = self::getConfig();
@@ -1187,7 +1198,8 @@ class VWP extends VObject
             VWP_ENABLE_DEBUG_BACKTRACE &&
             (function_exists('debug_backtrace')) &&
             (!self::$_nowarn)) {
-        
+         
+         
         	$backtrace = debug_backtrace(false);
         	$dmsg = $msg . "\nbacktrace:\n";
         	for($i=0;$i<count($backtrace);$i++) {
@@ -1232,7 +1244,19 @@ class VWP extends VObject
     	$_dom_implementation_registry =& VDOMImplementationRegistry::getInstance();    	
     	return $_dom_implementation_registry;
     }
-        
+
+    /**
+     * Current Session 
+     * 
+     * @access public
+     */
+    
+    public function &session() 
+    {
+    	$sess =& VSession::getInstance();
+    	return $sess;
+    }
+    
     /**
      * Class Constructor
      * 
@@ -1257,6 +1281,7 @@ class VWP extends VObject
         self::RequireLibrary('vwp.language.language');
         self::RequireLibrary('vwp.session');
         self::RequireLibrary('vwp.themes.config');
+        self::RequireLibrary('vwp.ui.ref');
                      
     }
 

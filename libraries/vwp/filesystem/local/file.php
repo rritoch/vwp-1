@@ -71,6 +71,12 @@ class VFile extends VFilesystemDriver
             
     function getMTime($file) 
     {
+    	$file = $this->_fs->path()->clean($file);
+
+    	if (!file_exists($file)) {
+    	    return VWP::RaiseWarning('File not found!',__CLASS__,ERROR_FILENOTFOUND,false);	
+    	}
+    	
         $time = filemtime($file);
         if ($time === false) {
             $err = error_get_last();
@@ -89,10 +95,16 @@ class VFile extends VFilesystemDriver
      */
 	 
     function getExt($file) 
-    {  
-        if (is_string($file)) {   
-            $dot = strrpos($file, '.') + 1;
-            return substr($file, $dot);
+    {      	
+        if (is_string($file)) {
+        	$file = $this->_fs->path()->clean($file);
+        	$parts = explode(DS,$file);
+        	$filename = array_pop($parts);   
+            $dot = strrpos($filename, '.');
+            if ($dot === false) {
+                return null;	
+            }
+            return substr($filename, $dot + 1);
         }  
         return VWP::raiseWarning("Invalid filename!",get_class($this)."::getExt",null,false);
     }

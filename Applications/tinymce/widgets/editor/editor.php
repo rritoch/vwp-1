@@ -38,9 +38,19 @@ class Tinymce_Widget_Editor extends VWidget {
    foreach($tinymce_cfg as $key=>$val) {
     $e1->set($key,$val);
    }
-      
+
+   $image_list_location = $shellob->getVar('image_list_url');         
+   if (!empty($image_list_location)) {       
+      $url = 'index.php?app=tinymce&widget=images&format=js&mode=raw&location='.urlencode($image_list_location);
+      $url = VRoute::getInstance()->encode($url);
+      $e1->set('external_image_list_url',$url); 
+   }   
+   
+   
    $editor = $tinymce->getConfig($e1);
-    
+   
+
+      
   }  
   
   $this->assignRef('base_url',$base_url);

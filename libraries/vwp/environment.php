@@ -435,6 +435,90 @@ class VEnv extends VObject
         } 
     }
    
+    public static function reroute() 
+    {
+        if (!isset(self::$_vfile)) {
+             $envptr = self::_getCurrentEnvId();   
+        }
+        
+    	// Yes I know this notify should be in the router, but its better called from here.
+    	
+    	$uri = VURI::currentURI();    	    	    
+    	VRoute::setCurrentURI($uri);    	    	    	
+    	VNotify::Notify('decode_url','route'); // Shhh... Don't tell anyone its here!    	
+    	$uri = VRoute::getCurrentURI();
+    	
+    	
+    	$parts = explode('/',$uri);
+    	array_shift($parts);
+    	array_shift($parts);
+    	$parts[0] = '';    	
+    	$uri = implode('/',$parts);
+
+    	unset($parts);
+    	
+        $format = null; 
+        $path = '';
+        $segments = array();
+
+        $router =& VRoute::getInstance();
+        
+        self::$_get = $_GET;
+        
+        if ($uri !== null) {                
+            $script_name = VRequest::getScriptName();
+            $parts = explode('?',$uri);            
+                                           
+            if ($script_name !== null) {
+                $l = strlen($script_name);
+                                                
+                if (substr($parts[0],0,$l) != $script_name || (strlen($parts[0]) > $l)) {
+                    $format = self::$_vfile->getExt($parts[0]);
+                    if (substr($parts[0],0,$l) == $script_name) {
+                        $path = self::$_vfile->stripExt(substr($parts[0],$l));
+                    } else {
+                        $cparts = explode('/',$script_name);
+                        array_pop($cparts);
+                        $base = implode('/',$cparts);
+                        $l = strlen($base);
+                        $path = self::$_vfile->stripExt(substr($parts[0],$l));
+                    }
+                    $segments = explode('/',$path);                            
+                }
+                if (count($parts) > 1) {
+        	           $q = VUri::parseQuery($parts[1]);
+        	           self::$_get = $q; 
+                } else {
+        	           self::$_get = array();
+                }                
+            }                
+        }
+                
+
+        
+        foreach(self::$env_heap["env"] as $envptr=>$value) {
+            self::$env_heap["env"][$envptr]['data']->env["get"] = self::$_get;
+            foreach(self::$_get as $key=>$val) {
+            	if (!isset(self::$env_heap["env"][$envptr]['data']->env["any"][$key])) {
+                    self::$env_heap["env"][$envptr]['data']->env["get"][$key] = $val;
+            	}
+            }               	
+        }
+
+        self::$_route = $router->decode($segments);        
+
+        self::$_route["format"] = $format;
+
+        foreach(self::$env_heap["env"] as $envptr=>$value) {
+            self::$env_heap["env"][$envptr]['data']->env["route"] = self::$_route;
+            foreach(self::$_route as $key=>$val) {
+            	if (!isset(self::$env_heap["env"][$envptr]['data']->env["any"][$key])) {
+                    self::$env_heap["env"][$envptr]['data']->env["any"][$key] = $val;
+            	}
+            }               	
+        }             
+    }
+    
     /**
      * Class Constructor
      * 
@@ -455,17 +539,6 @@ class VEnv extends VObject
   
         if (!isset(self::$_get)) {
             self::$_get = $_GET;
-        }
-
-        if (!isset(self::$_route)) {    
-            $path_info = VRequest::getPathInfo();
-            $format = self::$_vfile->getExt($path_info);
-            $path = self::$_vfile->stripExt($path_info);
-            $segments = explode('/',$path);
-            $router = VRoute::getInstance();
-      
-            self::$_route = $router->decode($segments);
-            self::$_route["format"] = $format;     
         }
   
         if (!isset(self::$env_heap)) {
@@ -488,14 +561,7 @@ class VEnv extends VObject
                 $this->env["any"][$key] = $val;
                 $this->env["post"][$key] = $val;
             }   
-        }
-  
-        $this->env["route"] = self::$_route;
-        foreach(self::$_route as $key=>$val) {
-            if (!isset($this->env["any"][$key])) {
-                $this->env["any"][$key] = $val;
-            }
-        }
+        }  
   
         array_push(self::$env_heap["env"],array("data"=>$this));    
     }

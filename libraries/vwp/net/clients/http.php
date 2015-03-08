@@ -103,6 +103,7 @@ class VHTTPClient extends VObject
         		return $this->wpost($url,$data,$options);
         		break;
         	default:
+        		$post_data = $data;
         		break;
         }
         

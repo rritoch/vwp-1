@@ -40,11 +40,23 @@ class User_Admin_Widget_Menu extends VWidget {
   
  }
  
- function display($tpl = null) {
-  $shellob =& VWP::getShell();
-  $current_widget = $shellob->getVar('current_widget');
-  $this->assignRef('current_widget',$current_widget);
-  parent::display($tpl);
- }
+   function display($tpl = null) 
+   {
+       $shellob =& VWP::getShell();
+       $current_widget = $shellob->getVar('current_widget');
+       $this->assignRef('current_widget',$current_widget);
+  
+       $urls = array(
+        'users'=>'index.php?app=user&widget=admin.users',
+        'configure'=>'index.php?app=user&widget=admin.admin'     
+       );
+       $vroute =& VRoute::getInstance();
+
+       $urls['users'] = $vroute->encode($urls['users']);
+       $urls['configure'] = $vroute->encode($urls['configure']);
+       $this->assignRef('urls',$urls);
+          
+       parent::display($tpl);
+   }
 
 }
