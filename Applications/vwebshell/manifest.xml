@@ -1,0 +1,26 @@
+<application_manifest 
+ xmlns="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest/"
+ app="vwebshell">
+ <name>VWP - VWeb Shell</name>
+ <author>Ralph Ritoch</author>
+ <author_link>http://www.vnetpublishing.com</author_link>
+ <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
+ <version>1.0.1</version>
+ <version_start_date></version_start_date>
+ <version_release_date></version_release_date>
+ <install>
+  <extract>local</extract>
+ </install>  
+ <folder name="setup" version="1.0.1">
+  <file>/installer.php</file>
+  <file>/index.html</file>
+ </folder>
+ <folder name="base" version="1.0.1">
+  <file>/preinstall.php</file>
+  <file>/vwebshell.php</file>
+  <file>/manifest.xml</file>
+  <file>/index.html</file>
+ </folder>
+</application_manifest>

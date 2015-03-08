@@ -1,0 +1,96 @@
+
+h1, h2, h3, h4, h5, h6, p, input, a:hover,a:link,a:visited,a:active {
+ font-family: Arial, Verdana, sans-serif;
+}
+
+h1 {
+ font-size: 16pt;
+}
+
+h2 {
+ font-size: 15pt;
+}
+
+h3 {
+ font-size: 14pt;
+}
+
+h4 {
+ font-size: 13pt;
+}
+
+h5 {
+ font-size: 12pt;
+}
+
+p, a:link, a:visited, a:active, a:hover {
+ font-size: 10pt;
+}
+
+
+div.titlebar h1 {
+ font-family: "Myriad Pro", Arial, Verdana, sans-serif;
+ font-size: 14pt;
+}
+
+div.titlebar h2 {
+ font-family: "Myriad Pro", Arial, Verdana, sans-serif;
+ font-size: 13pt;
+}
+
+#topmenu div.bg ul li a:link,
+#topmenu div.bg ul li a:visited,
+#topmenu div.bg ul li a:active,
+#topmenu div.bg ul li a:hover {
+ font-family: "Myriad Pro", Arial, Verdana, sans-serif;
+ font-size: 10pt;
+ text-decoration: none;
+ font-weight: bold; 
+}
+
+table.control_panel tr.controls a:link,
+table.control_panel tr.controls a:visited,
+table.control_panel tr.controls a:active,
+table.control_panel tr.controls div.btn input,
+table.control_panel tr.controls div.btn input:hover {
+ font-family: "Myriad Pro", Arial, Verdana, sans-serif;
+ font-size: 10pt;
+ text-decoration: none;
+ font-weight: bold; 
+}
+
+table.control_panel tr.col_titles td.header {
+ font-family: "Myriad Pro", Arial, Verdana, sans-serif;
+ font-size: 10pt;
+ text-decoration: none;
+ font-weight: bold; 
+ letter-spacing: 2px;
+}
+
+table.control_panel tr.title td.title h2 {
+ font-family: "Myriad Pro", Arial, Verdana, sans-serif;
+ font-size: 14pt;
+ text-decoration: none;
+ font-weight: bold;   
+}
+
+table.control_panel tr.data td.data {
+ font-family: Arial, Verdana, sans-serif;
+ font-size: 10pt;
+ text-decoration: none;
+}
+
+table.control_panel tr.data td.label {
+ letter-spacing: 1px;
+}
+
+
+ul.tabset a:link,
+ul.tabset a:visited,
+ul.tabset a:active,
+ul.tabset a:hover {
+ font-family: "Myriad Pro", Arial, Verdana, sans-serif;
+ font-size: 10pt;
+ text-decoration: none;
+ font-weight: bold; 
+}

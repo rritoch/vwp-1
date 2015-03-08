@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<frame>
+ <id>admin_menu</id>
+ <items>
+  <item>
+   <visible>1</visible>
+   <title></title>
+   <disabled>0</disabled>
+   <url>index.php?app=menu&amp;widget=vmenu&amp;ref=admin_menu</url>
+   <widget>menu.vmenu</widget>
+   <ref>admin_menu</ref>
+  </item>
+ </items>
+</frame>

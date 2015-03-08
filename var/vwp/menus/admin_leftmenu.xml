@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu type="menu">
+ <title></title>
+ <default_security_policy>deny</default_security_policy>
+ <items>
+  <item type="applink">
+   <url>index.php?app=user&amp;widget=admin.users</url>
+   <widget>user.admin.users</widget>
+   <text>User Administration</text>
+   <title>User Administration</title>
+  </item>
+  <item type="applink">
+   <url>index.php?app=content&amp;widget=admin</url>
+   <widget>content.admin</widget>
+   <text>Content Configuration</text>
+   <title>Content Configuration</title>
+  </item>
+  <item type="applink">
+   <url>index.php?app=content&amp;widget=catmgr</url>
+   <widget>content.catmgr</widget>
+   <text>Article Categories</text>
+   <title>Article Categories</title>
+  </item>
+  <item type="applink">
+   <url>index.php?app=content&amp;widget=articlemgr</url>
+   <widget>content.articlemgr</widget>
+   <text>Article Manager</text>
+   <title>Article Manager</title>
+  </item>
+  <item type="applink">
+   <url>index.php?app=menumgr</url>
+   <widget>menumgr</widget>
+   <text>Menu Manager</text>
+   <title>Menu Manager</title>
+  </item>
+ </items>
+</menu>

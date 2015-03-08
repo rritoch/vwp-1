@@ -1,0 +1,107 @@
+
+html, body {
+ background-color: #BBBBBB;
+}
+
+h1, h2, h3, h4, h5, h6, p, input, a:hover,a:link,a:visited,a:active {
+ color: #000000;
+}
+
+div {
+ margin: 0;
+ padding: 0px 0px;
+}
+
+table td {
+ vertical-align: top;
+}
+
+div.titlebar {
+	background-color: #ffffff;
+}
+
+div.titlebar h1 {
+ color: #184745;
+}
+
+div.titlebar h2 {
+  color: transparent;   
+}
+
+div.titlebar h2 span {
+ display: none;
+}
+
+#topmenu div.bg ul li a:link,
+#topmenu div.bg ul li a:visited,
+#topmenu div.bg ul li a:active {
+ 
+ color: #195856;
+}
+
+#topmenu div.bg ul li a:hover {
+ color: #808000;
+}
+
+fieldset.warn,
+fieldset.err legend {
+ background-color: yellow;
+}
+
+fieldset.err,
+fieldset.err legend {
+ background-color: red;
+}
+
+#console_frames td.panel,
+#console_frames td.info,
+#console {
+ background-color: #ffffff;
+}
+
+table.control_panel tr.controls a:link,
+table.control_panel tr.controls a:visited,
+table.control_panel tr.controls a:active,
+table.control_panel tr.controls div.btn input {
+ color: #195856;
+}
+
+table.control_panel tr.controls a:hover,
+table.control_panel tr.controls div.btn input:hover {
+ color: #808000;
+}
+
+table.control_panel tr.col_titles td.header {
+ color: #808000;
+}
+
+table.control_panel tr.title td.title {
+ background-color: #03efd8; 
+}
+
+table.control_panel tr.title td.title {
+ color: #000000; 
+}
+
+table.control_panel tr.data td.data {
+ background-color: #557773;
+ color: #ffffff;
+}
+
+table.control_panel tr.data td.label {
+ background-color: #03e2c1;
+ color: #225553;
+}
+
+/* Tabs */
+
+ul.tabset a:link,
+ul.tabset a:visited,
+ul.tabset a:active {
+ color: #195856;
+}
+
+ul.tabset a:hover {
+ color: #808000;
+}
+	

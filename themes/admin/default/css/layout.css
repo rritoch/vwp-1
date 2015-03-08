@@ -1,0 +1,486 @@
+/**
+ * Author: Ralph Ritoch
+ * E-Mail: rritoch@gmail.com
+ * Copyright: All Rights Reserved 
+ */  
+  
+/* Page */
+
+html, body {
+ margin: 0;
+ padding: 0px 0px;
+ height: 100%;
+ width: 100%;
+}
+
+form {
+ margin: 0;
+ padding: 0px 0px;
+}
+
+.clr_r {
+ clear: right; 
+}
+
+.clr_l {
+ clear: left;
+}
+
+.clr_b {
+ clear: both;
+ height: 0px;
+ width: 0px;
+}
+
+div {
+ margin: 0px;
+ padding: 0px 0px;
+}
+
+td {
+ vertical-align: top;
+}
+
+h1, h2, h3, h4, h5, h6, p, input,a:hover,a:link,a:visited,a:active {
+ margin: 0;
+}
+
+/* Title Bar */
+
+div.titlebar {
+	margin: 0;
+	padding: 0px 5px;
+	position: relative;
+	overflow: hidden;
+	height: 38px;
+	border: none;
+}
+
+div.titlebar h1 {
+ margin: 0;
+ padding: 5px 5px; 
+ position: absolute;
+ top: 0;
+ left: 5px;
+ height: 28px;
+ overflow: hidden;
+}
+
+div.titlebar h2 {
+ margin: 0;
+ padding: 5px 5px;
+ float: right;
+ position: absolute;
+ top: 5px;
+ right: 5px;
+ height: 28px;
+ overflow: hidden; 
+}
+
+/* Top Menu */
+
+#topmenu {
+ margin: 0;
+ padding: 0px 0px 0px 0px; 
+}
+
+#topmenu div.bg {
+ margin: 0px 0px 0px 9px;
+ padding: 0px 0px;
+}
+
+#topmenu ul {
+ margin: 0;
+ padding: 0px 0px;
+ list-style-type: none;   
+}
+
+#topmenu li {
+ display: block;
+ float: left;
+ margin: 0;
+ padding: 0px 0px;
+ height: 26px;
+ overflow: hidden;  
+}
+
+/* Top Menu Buttons */
+
+#topmenu div.bg ul li {
+ margin: 0;
+ padding: 0px 10px;
+}
+
+
+#topmenu div.bg ul li a:link,
+#topmenu div.bg ul li a:visited,
+#topmenu div.bg ul li a:active,
+#topmenu div.bg ul li a:hover {
+ margin: 0;
+ padding: 0px 0px 0px 4px;
+}
+
+#topmenu div.bg ul li a:link span.linktext,
+#topmenu div.bg ul li a:visited span.linktext,
+#topmenu div.bg ul li a:active span.linktext,
+#topmenu div.bg ul li a:hover span.linktext {
+ padding: 4px 8px 7px 4px;
+}
+
+/* page layout */
+
+table#console_frames {
+ height: 100%;
+ width: 100%; 
+ top: 54px;
+ bottom: 0px; 
+}
+
+#console_frames,
+#console_frames tr.status,
+#console_frames tr.terminal,
+#console_frames td.panel,
+#console_frames td.panel_bar,
+#console_frames td.info {
+ padding: 0px 0px;
+ margin: 0; 
+ border-spacing: 0;
+}
+
+#bg {
+ margin:0;
+ clear: both;
+ padding: 0px 0px 11px 0px; 
+}
+
+#console_frames td.panel {
+ padding: 0px 0px 0px 8px;
+}
+
+#console_frames tr.panelh_bar td.vbar,
+#console_frames td.panel_bar {
+ width: 8px;
+}
+
+#console_frames tr.panelh_bar div.bar {
+ height: 10px; 
+}
+
+#console_frames tr.panelh_bar td.vbar {
+ height: 10px;  
+}
+
+#console_frames tr.panelh_bar td.vbar div.vbar { 
+ height: 11px;
+}
+
+#console_frames td.vbar div.vbar,
+#console_frames tr.panel div.bar,
+#console_frames tr.info div.bar {
+ margin: 0;
+ padding: 0px 0px; 
+}
+
+#footer, #content, #sys_messages, #sys_status, #left_panel {
+ padding: 5px 5px;
+ margin: 0;
+ clear: both;
+}
+
+#footer p {
+ text-align: center;
+ width: 100%;
+ margin: 0px auto;
+}
+hr.layout_bar {
+ height: 11px;
+ width: 100%;
+ border: none;
+ margin: 0;  
+}
+
+
+#bg {
+ height: 100%;
+}
+
+#header {  
+ clear: both;
+}
+
+#wrapper {
+ height: auto;
+ min-height: 100%; 
+ padding: 0px 0px; 
+ clear: both;
+ margin: 0;
+ bottom: 0;
+ overflow: visible;  
+}
+
+#console_wrapper {
+ height: 100%; 
+ overflow: visible;
+ clear: both;
+ padding: 0px 0px 11px 0px; 
+}
+
+#console { 
+ height: 100%; 
+ clear: both;  
+}
+
+#console_frames td.panel_bar div.clr_b {
+ width: 8px;
+ height: 11px;
+}
+
+
+
+/* Content */
+
+div.content_body h2 {
+ border-bottom: 2px solid #03e2c1;
+ margin-bottom: 5px;
+}
+
+/* Control Panel */
+
+
+table.control_panel,
+table.control_panel tr,
+table.control_panel td {
+ padding: 0px 0px;
+ margin: 0; 
+ border-spacing: 0;
+}
+table.control_panel {
+ width: 100%;
+}
+
+table.control_panel tr.controls td {
+ height: 23px;  
+}
+
+table.control_panel tr.controls td ul, 
+table.control_panel tr.controls td ul li {
+ margin: 0;
+ padding: 0px 0px;
+ list-style-type: none;
+}
+
+table.control_panel td.data,
+table.control_panel td.label {
+ padding: 2px 3px;
+}
+
+table.control_panel td.data input {
+ padding: 3px 3px;
+ margin-top: 3px;
+ margin-bottom: 3px;
+}
+
+table.control_panel tr.controls input {
+ border: none;
+ background-color: transparent;
+ cursor: pointer;
+ padding: 0px 0px;
+ margin: auto 0 5px 0;
+}
+
+table.control_panel tr.controls a:link,
+table.control_panel tr.controls a:visited,
+table.control_panel tr.controls a:active,
+table.control_panel tr.controls a:hover,
+table.control_panel tr.controls div.btn {
+ display: block;
+ text-decoration: none;
+ padding-left: 3px; 
+ height: 23px;
+ margin: 0 5px;  
+}
+
+table.control_panel tr.controls a:link span,
+table.control_panel tr.controls a:visited span,
+table.control_panel tr.controls a:active span,
+table.control_panel tr.controls a:hover span,
+table.control_panel tr.controls div.btn span {
+ margin: 0;
+ padding: 2px 5px 0px 0px;
+ height: 19px;
+}
+
+table.control_panel tr.controls a:link span,
+table.control_panel tr.controls a:visited span,
+table.control_panel tr.controls a:active span,
+table.control_panel tr.controls div.btn span {
+ line-height: 15px;
+ padding-top: 3px;
+}
+
+table.control_panel tr.controls a:link span,
+table.control_panel tr.controls a:visited span,
+table.control_panel tr.controls a:active span,
+table.control_panel tr.controls div.btn span {
+ vertical-align: middle;
+ padding-bottom: 4px;
+}
+
+table.control_panel tr.controls a:link span input,
+table.control_panel tr.controls a:visited span input,
+table.control_panel tr.controls a:active span input,
+table.control_panel tr.controls div.btn span input {
+ vertical-align: middle;
+}
+
+table.control_panel tr.controls a:link span,
+table.control_panel tr.controls a:visited span,
+table.control_panel tr.controls a:active span,
+table.control_panel tr.controls a:hover span {
+ padding-left: 3px;
+}
+
+table.control_panel tr.controls div.btn span input {
+ display:block;
+ height: 19px;
+ line-height: 15px;
+ vertical-align: middle;
+ padding: 0px 0px;
+ margin: -2px 0 0 0; 
+}
+
+table.control_panel tr.controls td ul li {
+ float: right;
+}
+
+table.control_panel tfoot tr.controls td ul li {
+ float: left;
+}
+
+
+table.control_panel td.hbar {
+ height: 6px;
+}
+
+table.control_panel td.vbar {
+ width: 5px;
+}
+
+table.control_panel tr.col_titles td {
+ height: 19px;
+ overflow: hidden;
+ line-height: 15px;
+}
+
+table.control_panel tr.col_titles td input {
+ margin-top: 3px;
+}
+
+table.control_panel tr.col_titles td,
+table.control_panel td.ctr {
+ text-align: center;
+}
+
+table.control_panel tr.title td.title {
+ padding: 3px 5px;
+}
+
+table.control_panel tr.data td.label {
+ text-align: right;
+}
+
+table.control_panel h2 {
+ text-decoration: none;
+ margin: 0;
+ border-bottom: none;
+}
+
+
+table.control_panel td.vbar div.clr_b {
+ width: 5px;
+ height: 100%;
+}
+
+table.control_panel tr.col_titles td.header {
+ line-height: 19px;
+}	
+
+table.control_panel a.down:link span,
+table.control_panel a.down:visited span,
+table.control_panel a.down:active span,
+table.control_panel a.down:hover span,
+table.control_panel a.up:link span,
+table.control_panel a.up:visited span,
+table.control_panel a.up:active span,
+table.control_panel a.up:hover span {
+ display: block;
+ float: left;
+ width: 18px;
+ height: 17px;
+ margin: 8px 0px 3px 5px;   
+}
+
+table.control_panel input.order {
+ float: left;
+ height: 17px;
+ margin: 0px 0px 0px 5px;
+}
+
+/* Tabs */
+
+div.tabsettabs {
+ clear: both;
+}
+
+div.tab_top {
+ margin: 0;
+ padding: 6px 0px 0px 0px;
+}
+
+div.tab_bottom {
+ margin: 0;
+ padding: 0px 0px 6px 0px;
+}
+
+div.tab_left {
+ margin: 0;
+ padding: 0px 0px 0px 5px;
+}
+
+div.tab_right {
+ margin: 0;
+ padding: 0px 5px 0px 0px;
+}
+
+ul.tabset, ul.tabset li { 
+ list-style-type: none;
+ display: block;
+}
+
+ul.tabset {
+ margin: 0;
+ clear: both;
+ padding: 0px 0px;
+}
+
+ul.tabset li {
+ float: left;
+ margin: 0px 0px 0px 5px;
+}
+
+ul.tabset a:link,
+ul.tabset a:visited,
+ul.tabset a:active,
+ul.tabset a:hover {
+ height: 23px;
+ padding: 0px 0px 0px 10px;
+ text-decoration: none;
+}
+
+ul.tabset a:link span,
+ul.tabset a:visited span,
+ul.tabset a:active span,
+ul.tabset a:hover span {
+ height: 23px;
+ padding: 4px 25px 0px 0px;
+}

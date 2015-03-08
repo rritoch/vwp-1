@@ -1,0 +1,67 @@
+<application_manifest 
+ xmlns="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest/"
+ app="content">
+ <name>VWP - Content Manager</name>
+ <author>Ralph Ritoch</author>
+ <author_link>http://www.vnetpublishing.com</author_link>
+ <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
+ <version>1.0.1</version>
+ <version_start_date></version_start_date>
+ <version_release_date></version_release_date> 
+ <folder name="setup" version="1.0.1">
+  <file>/installer.php</file>
+  <file>/index.html</file>
+ </folder>
+ <folder name="base" version="1.0.1">
+  <file>/content.php</file>
+  <file>/manifest.xml</file>
+  <file>/models/admin.php</file>
+  <file>/models/article.php</file>
+  <file>/models/articles.php</file>
+  <file>/models/categories.php</file>
+  <file>/models/category.php</file>
+  <file>/models/content.php</file>
+  <file>/widgets/admin/admin.php</file>
+  <file>/widgets/admin/layouts/html/default.php</file>
+  <file>/widgets/article/article.php</file>
+  <file>/widgets/article/params.php</file>
+  <file>/widgets/article/layouts/html/404.php</file>
+  <file>/widgets/article/layouts/html/default.php</file>
+  <file>/widgets/articlemgr/articlemgr.php</file>
+  <file>/widgets/articlemgr/layouts/html/default.php</file>
+  <file>/widgets/articlemgr/layouts/html/edit.php</file>
+  <file>/widgets/category/category.php</file>
+  <file>/widgets/category/params.php</file>
+  <file>/widgets/category/layouts/html/404.php</file>
+  <file>/widgets/category/layouts/html/blog.php</file>
+  <file>/widgets/category/layouts/html/default.php</file>
+  <file>/widgets/catmgr/catmgr.php</file>
+  <file>/widgets/catmgr/layouts/html/default.php</file>
+  <file>/widgets/catmgr/layouts/html/edit.php</file>
+  <file>/widgets/home/home.php</file>
+  <file>/widgets/home/layouts/html/default.php</file>
+  <file>/index.html</file>
+  <file>/models/index.html</file>
+  <file>/widgets/admin/index.html</file>
+  <file>/widgets/admin/layouts/html/index.html</file>
+  <file>/widgets/admin/layouts/index.html</file>
+  <file>/widgets/article/index.html</file>
+  <file>/widgets/article/layouts/html/index.html</file>
+  <file>/widgets/article/layouts/index.html</file>
+  <file>/widgets/articlemgr/index.html</file>
+  <file>/widgets/articlemgr/layouts/html/index.html</file>
+  <file>/widgets/articlemgr/layouts/index.html</file>
+  <file>/widgets/category/index.html</file>
+  <file>/widgets/category/layouts/html/index.html</file>
+  <file>/widgets/category/layouts/index.html</file>
+  <file>/widgets/catmgr/index.html</file>
+  <file>/widgets/catmgr/layouts/html/index.html</file>
+  <file>/widgets/catmgr/layouts/index.html</file>
+  <file>/widgets/home/index.html</file>
+  <file>/widgets/home/layouts/html/index.html</file>
+  <file>/widgets/home/layouts/index.html</file>
+  <file>/widgets/index.html</file>    
+ </folder>
+</application_manifest>

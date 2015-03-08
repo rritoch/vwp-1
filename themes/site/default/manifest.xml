@@ -1,0 +1,53 @@
+<theme_manifest
+ xmlns="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ThemeManifest"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ThemeManifest http://standards.vnetpublishing.com/schemas/vwp/2010/10/ThemeManifest/"
+ theme_type="site" 
+ theme_id="default">
+ <name>VWP - Default Site Theme</name>
+ <author>Ralph Ritoch</author>
+ <author_link>http://www.vnetpublishing.com</author_link>
+ <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
+ <version>1.0.1</version>
+ <version_start_date></version_start_date>
+ <version_release_date></version_release_date> 
+ <folder name="setup" version="1.0.1">
+  <file>/installer.php</file>
+  <file>/index.html</file>
+ </folder>
+ <folder name="base" version="1.0.1">
+  <file>/manifest.xml</file>
+  <file>/apps/content/home/html/default.php</file>
+  <file>/apps/content/home/xml/default.php</file>
+  <file>/base/html/index.php</file>
+  <file>/base/wsdl/index.php</file>
+  <file>/base/xml/index.php</file>
+  <file>/images/favicon.ico</file>
+  <file>/images/footerbg.png</file>
+  <file>/images/raster1.png</file>
+  <file>/images/vnetlogo.png</file>
+  <file>/images/vpnetbg.jpg</file>
+  <file>/template.html.php</file>
+  <file>/template.wsdl.php</file>
+  <file>/template.xml.php</file>
+  <file>/apps/content/home/html/index.html</file>
+  <file>/apps/content/home/index.html</file>
+  <file>/apps/content/home/xml/index.html</file>
+  <file>/apps/content/index.html</file>
+  <file>/apps/index.html</file>
+  <file>/base/csv/index.html</file>
+  <file>/base/csv/index.php</file>
+  <file>/base/html/index.html</file>
+  <file>/base/index.html</file>
+  <file>/base/js/index.html</file>
+  <file>/base/js/index.php</file>
+  <file>/base/wsdl/index.html</file>
+  <file>/base/xml/index.html</file>
+  <file>/css/default.css</file>
+  <file>/css/index.html</file>
+  <file>/images/index.html</file>
+  <file>/index.html</file>
+  <file>/template.csv.php</file>
+  <file>/template.js.php</file>
+ </folder>
+</theme_manifest>

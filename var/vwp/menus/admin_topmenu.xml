@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu type="menu">
+ <title></title>
+ <default_security_policy>deny</default_security_policy>
+ <items>
+  <item type="applink">
+   <url>index.php?app=thememgr</url>
+   <widget>thememgr</widget>
+   <text>Theme Manager</text>
+   <title>Theme Manager</title>
+  </item>
+  <item type="applink">
+   <disabled>0</disabled>
+   <url>index.php?app=vwp&amp;widget=configure</url>
+   <widget>vwp.configure</widget>
+   <text>System Configuration</text>
+   <ref></ref>
+   <visible>1</visible>
+   <title>System Configuration</title>
+  </item>
+  <item type="applink">
+   <url>index.php</url>
+   <widget></widget>
+   <text>Site</text>
+   <title>Site</title>
+  </item>
+ </items>
+</menu>

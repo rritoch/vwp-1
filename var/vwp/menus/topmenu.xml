@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu type="menu">
+ <title>Top Menu</title>
+ <disabled>0</disabled>
+ <default_security_policy>deny</default_security_policy>
+ <visible>1</visible>
+ <id>topmenu</id>
+ <items>
+  <item type="applink">
+   <disabled>0</disabled>
+   <url>index.php</url>
+   <widget>vwp.configure</widget>
+   <text>System Configuration</text>
+   <ref></ref>
+   <visible>1</visible>
+   <title>System Configuration</title>
+  </item>
+ </items>
+</menu>

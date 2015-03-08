@@ -1,0 +1,37 @@
+<application_manifest 
+ xmlns="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest/"
+ app="menumgr">
+ <name>VWP - Menu Manager</name>
+ <author>Ralph Ritoch</author>
+ <author_link>http://www.vnetpublishing.com</author_link>
+ <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
+ <version>1.0.1</version>
+ <version_start_date></version_start_date>
+ <version_release_date></version_release_date> 
+ <folder name="setup" version="1.0.1">
+  <file>/installer.php</file>
+  <file>/index.html</file>
+ </folder>
+ <folder name="base" version="1.0.1">
+  <file>/manifest.xml</file>
+  <file>/menumgr.php</file>
+  <file>/models/menu.php</file>
+  <file>/models/menus.php</file>
+  <file>/widgets/menumgr/layouts/html/default.php</file>
+  <file>/widgets/menumgr/layouts/html/edit.php</file>
+  <file>/widgets/menumgr/layouts/html/editapplinkitem.php</file>
+  <file>/widgets/menumgr/layouts/html/editcategoryitem.php</file>
+  <file>/widgets/menumgr/layouts/html/editlinkitem.php</file>
+  <file>/widgets/menumgr/layouts/html/editspaceritem.php</file>
+  <file>/widgets/menumgr/layouts/html/newitem.php</file>
+  <file>/widgets/menumgr/menumgr.php</file>
+  <file>/index.html</file>
+  <file>/models/index.html</file>
+  <file>/widgets/index.html</file>
+  <file>/widgets/menumgr/index.html</file>
+  <file>/widgets/menumgr/layouts/html/index.html</file>
+  <file>/widgets/menumgr/layouts/index.html</file>  
+ </folder>
+</application_manifest>

@@ -1,0 +1,81 @@
+<theme_manifest 
+ xmlns="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ThemeManifest"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ThemeManifest http://standards.vnetpublishing.com/schemas/vwp/2010/10/ThemeManifest/"
+theme_type="admin" theme_id="default">
+ <name>VWP - Default Administrator Theme</name>
+ <author>Ralph Ritoch</author>
+ <author_link>http://www.vnetpublishing.com</author_link>
+ <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
+ <version>1.0.1</version>
+ <version_start_date></version_start_date>
+ <version_release_date></version_release_date> 
+ <folder name="setup" version="1.0.1">
+  <file>/installer.php</file>
+  <file>/index.html</file>
+ </folder>
+ <folder name="base" version="1.0.1">
+  <file>/manifest.xml</file>
+  <file>/targets.xml</file>
+  <file>/template.html.php</file>
+  <file>/template.wsdl.php</file>
+  <file>/template.xml.php</file> 
+  <file>/apps/menu/hmenu/html/default.php</file>
+  <file>/base/html/index.php</file>
+  <file>/base/wsdl/index.php</file>
+  <file>/base/xml/index.php</file>
+  <file>/css/colors.css</file>
+  <file>/css/fonts.css</file>
+  <file>/css/layout.css</file>
+  <file>/css/old_style.css</file>
+  <file>/images/vnetlogo.png</file>
+  <file>/images/vpnetbg.jpg</file>
+  <file>/images/favicon.ico</file>
+  <file>/images/footerbg.png</file>
+  <file>/images/raster1.png</file>
+  <file>/images/controlpanel/ctrl_btn_left.png</file>
+  <file>/images/controlpanel/ctrl_btn_right.png</file>
+  <file>/images/controlpanel/ctrl_btndown.png</file>
+  <file>/images/controlpanel/ctrl_btnhbar23px.png</file>
+  <file>/images/controlpanel/ctrl_btnup.png</file>
+  <file>/images/controlpanel/ctrl_hbar19px.png</file>
+  <file>/images/controlpanel/ctrl_hbar6px.png</file>
+  <file>/images/controlpanel/ctrl_vbar5px.png</file>
+  <file>/images/layout/hbar11px.png</file>
+  <file>/images/layout/metal_bg.png</file>
+  <file>/images/layout/vbar6px.png</file>
+  <file>/images/layout/vbar7px.png</file>
+  <file>/images/layout/vbar8px.png</file>  
+  <file>/images/tabset/tab_hbar6px.png</file>
+  <file>/images/tabset/tab_left.png</file>
+  <file>/images/tabset/tab_left_sel.png</file>
+  <file>/images/tabset/tab_right.png</file>
+  <file>/images/tabset/tab_right_sel.png</file>
+  <file>/images/tabset/tab_vbar5px.png</file>
+  <file>/images/titlebar/logo.png</file>
+  <file>/images/titlebar/titlebar1.png</file>
+  <file>/images/topmenu/tmenu_bg.png</file>
+  <file>/images/topmenu/tmenu_btn_left.png</file>
+  <file>/images/topmenu/tmenu_btn_right.png</file>
+  <file>/images/topmenu/tmenu_left.png</file>
+  <file>/js/theme.js</file>
+  <file>/js/theme_footer.js</file>
+  <file>/apps/index.html</file>
+  <file>/apps/menu/hmenu/html/index.html</file>
+  <file>/apps/menu/hmenu/index.html</file>
+  <file>/apps/menu/index.html</file>
+  <file>/base/html/index.html</file>
+  <file>/base/index.html</file>
+  <file>/base/wsdl/index.html</file>
+  <file>/base/xml/index.html</file>
+  <file>/css/index.html</file>
+  <file>/images/controlpanel/index.html</file>
+  <file>/images/index.html</file>
+  <file>/images/layout/index.html</file>
+  <file>/images/tabset/index.html</file>
+  <file>/images/titlebar/index.html</file>
+  <file>/images/topmenu/index.html</file>
+  <file>/index.html</file>
+  <file>/js/index.html</file>  
+</folder>
+</theme_manifest>

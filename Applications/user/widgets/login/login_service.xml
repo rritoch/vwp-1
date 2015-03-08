@@ -1,0 +1,27 @@
+<service
+ xmlns="http://standards.vnetpublishing.com/schemas/vwp/2010/10/Service"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/10/Service http://standards.vnetpublishing.com/schemas/vwp/2010/10/Service/">
+
+ 
+ <!-- Header -->
+ 
+ <name>Login</name>
+ <author>Ralph Ritoch</author>
+ <author_email>rritoch@gmail.com</author_email>
+ <author_url>http://www.vnetpublishing.com</author_url>
+ <copyright>Ralph Ritoch 2010</copyright>
+ <license>ALL RIGHTS RESERVED</license>
+ <description>Default Login Service for the VWP Security System.</description>
+ 
+ <!-- Methods -->
+   
+ <method name="Login">
+  <summary>Authenticate a user</summary>
+  <arguments>
+   <argument name="Credentials" type="map" />
+  </arguments>
+  <return type="boolean" />
+ </method>
+ 
+</service> 

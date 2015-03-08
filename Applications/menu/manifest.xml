@@ -1,0 +1,37 @@
+<application_manifest 
+ xmlns="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest/"
+ app="Menu">
+ <name>VWP - Menu</name>
+ <author>Ralph Ritoch</author>
+ <author_link>http://www.vnetpublishing.com</author_link>
+ <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
+ <version>1.0.1</version>
+ <version_start_date></version_start_date>
+ <version_release_date></version_release_date> 
+ <folder name="setup" version="1.0.1">
+  <file>/installer.php</file>
+  <file>/index.html</file>
+ </folder>
+ <folder name="base" version="1.0.1">
+  <file>/manifest.xml</file>
+  <file>/menu.php</file>
+  <file>/models/menu.php</file>
+  <file>/widgets/hmenu/hmenu.php</file>
+  <file>/widgets/hmenu/params.php</file>
+  <file>/widgets/hmenu/layouts/html/default.php</file>
+  <file>/widgets/vmenu/vmenu.php</file>
+  <file>/widgets/vmenu/params.php</file>
+  <file>/widgets/vmenu/layouts/html/default.php</file>
+  <file>/index.html</file>
+  <file>/models/index.html</file>
+  <file>/widgets/hmenu/index.html</file>
+  <file>/widgets/hmenu/layouts/html/index.html</file>
+  <file>/widgets/hmenu/layouts/index.html</file>
+  <file>/widgets/index.html</file>
+  <file>/widgets/vmenu/index.html</file>
+  <file>/widgets/vmenu/layouts/html/index.html</file>
+  <file>/widgets/vmenu/layouts/index.html</file>      
+ </folder>
+</application_manifest>

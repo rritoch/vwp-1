@@ -1,0 +1,15 @@
+<theme_targets 
+ xmlns="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ThemeTargets"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ThemeTargets http://standards.vnetpublishing.com/schemas/vwp/2010/10/ThemeTargets/"> 
+ 	<target>
+ 		<name>left_column</name>
+ 	</target>
+ 
+ <target> 
+  <name>content_top</name>
+ </target>
+ <target>
+  <name>content_bottom</name>
+ </target>
+</theme_targets>

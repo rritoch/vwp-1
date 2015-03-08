@@ -1,0 +1,73 @@
+<application_manifest 
+ xmlns="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest/"
+ app="thememgr">
+ <name>VWP - Theme Manager</name>
+ <author>Ralph Ritoch</author>
+ <author_link>http://www.vnetpublishing.com</author_link>
+ <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
+ <version>1.0.1</version>
+ <version_start_date>September 7, 2010</version_start_date>
+ <version_release_date></version_release_date> 
+ <folder name="setup" version="1.0.1">
+  <file>/installer.php</file>
+  <file>/index.html</file>
+ </folder>
+ <folder name="base" version="1.0.0">
+  <file>/manifest.xml</file>
+  <file>/thememgr.php</file>
+  <file>/models/frames.php</file>
+  <file>/models/targets.php</file>
+  <file>/models/themes.php</file>
+  <file>/widgets/framemgr/framemgr.php</file>
+  <file>/widgets/framemgr/layouts/html/default.php</file>
+  <file>/widgets/framemgr/layouts/html/edit_frame.php</file>
+  <file>/widgets/framemgr/layouts/html/edit_item.php</file>
+  <file>/widgets/framemgr/layouts/html/new_frame.php</file>
+  <file>/widgets/framemgr/layouts/html/new_item.php</file>
+  <file>/widgets/tabs/layouts/html/default.php</file>
+  <file>/widgets/tabs/layouts/html/footer.php</file>
+  <file>/widgets/tabs/layouts/xml/default.php</file>
+  <file>/widgets/tabs/tabs.php</file>  
+  <file>/widgets/thememgr/layouts/html/default.php</file>
+  <file>/widgets/thememgr/layouts/html/manage_theme.php</file>
+  <file>/widgets/thememgr/layouts/html/install.php</file>
+  <file>/widgets/thememgr/thememgr.php</file>
+ </folder>
+ <folder name="base" version="1.0.1">
+  <file>/manifest.xml</file>
+  <file>/thememgr.php</file>
+  <file>/models/frames.php</file>
+  <file>/models/targets.php</file>
+  <file>/models/themes.php</file>
+  <file>/widgets/framemgr/framemgr.php</file>
+  <file>/widgets/framemgr/layouts/html/default.php</file>
+  <file>/widgets/framemgr/layouts/html/edit_frame.php</file>
+  <file>/widgets/framemgr/layouts/html/edit_item.php</file>
+  <file>/widgets/framemgr/layouts/html/new_frame.php</file>
+  <file>/widgets/framemgr/layouts/html/new_item.php</file>
+  <file>/widgets/tabs/layouts/html/default.php</file>
+  <file>/widgets/tabs/layouts/html/footer.php</file>
+  <file>/widgets/tabs/layouts/xml/default.php</file>
+  <file>/widgets/tabs/tabs.php</file>  
+  <file>/widgets/thememgr/layouts/html/default.php</file>
+  <file>/widgets/thememgr/layouts/html/manage_theme.php</file>
+  <file>/widgets/thememgr/layouts/html/install.php</file>
+  <file>/widgets/thememgr/thememgr.php</file>
+  <file>/index.html</file>
+  <file>/models/index.html</file>
+  <file>/widgets/framemgr/index.html</file>
+  <file>/widgets/framemgr/layouts/html/index.html</file>
+  <file>/widgets/framemgr/layouts/index.html</file>
+  <file>/widgets/index.html</file>
+  <file>/widgets/tabs/index.html</file>
+  <file>/widgets/tabs/layouts/html/index.html</file>
+  <file>/widgets/tabs/layouts/index.html</file>
+  <file>/widgets/tabs/layouts/xml/index.html</file>
+  <file>/widgets/thememgr/index.html</file>
+  <file>/widgets/thememgr/layouts/.php</file>
+  <file>/widgets/thememgr/layouts/html/index.html</file>
+  <file>/widgets/thememgr/layouts/index.html</file>  
+ </folder> 
+</application_manifest>
