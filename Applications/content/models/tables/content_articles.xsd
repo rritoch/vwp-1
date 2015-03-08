@@ -1,0 +1,141 @@
+<xsd:schema 
+  targetNamespace="urn:vnetpublishing.com:app:content:table:content_articles"
+  xmlns="urn:vnetpublishing.com:app:content:table:content_articles" 
+  xmlns:tns="urn:vnetpublishing.com:app:content:table:content_articles" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns:sqltypes="http://standards.vnetpublishing.com/schemas/vwp/2010/12/DBI/sqltypes" 
+  elementFormDefault="qualified">
+  
+    <xsd:import namespace="http://standards.vnetpublishing.com/schemas/vwp/2010/12/DBI/sqltypes" schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/12/DBI/sqltypes/" />
+    
+    <!--  Declare content_articles Table -->
+    
+    <xsd:element name="content_articles">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:content_articles.row" minOccurs="0" maxOccurs="unbounded" />
+            </xsd:sequence>
+            <xsd:attribute name="auto_increment" type="sqltypes:column" default="id" />
+            <xsd:attribute name="prikey" type="sqltypes:column" default="id" />          
+        </xsd:complexType>
+    </xsd:element>
+    
+    <!--  Declare content_articles Row -->
+    
+    <xsd:element name="content_articles.row">
+        <xsd:complexType>
+            
+            <!--  Field: id -->
+            
+            <xsd:attribute name="id" type="sqltypes:integer" use="required" />
+            
+            <!--  Field: title -->
+            
+            <xsd:attribute name="title" use="required">
+                <xsd:simpleType>
+                    <xsd:restriction base="sqltypes:character_varying">
+                        <xsd:minLength value="0"/>
+                        <xsd:maxLength value="1024"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+
+            <!--  Field: content -->
+            
+            <xsd:attribute name="content" use="required">
+                <xsd:simpleType>
+                    <xsd:restriction base="sqltypes:character_varying">
+                        <xsd:minLength value="0"/>
+                        <xsd:maxLength value="65536"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+            
+            
+            <!--  Field: filename -->
+            
+            <xsd:attribute name="filename">
+                <xsd:simpleType>
+                    <xsd:restriction base="sqltypes:character_varying">
+                        <xsd:minLength value="0"/>
+                        <xsd:maxLength value="1024"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+
+            <!--  Field: description -->
+            
+            <xsd:attribute name="description">
+                <xsd:simpleType>
+                    <xsd:restriction base="sqltypes:character_varying">
+                        <xsd:minLength value="0"/>
+                        <xsd:maxLength value="65536"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>            
+             
+            <!--  Field: keywords -->
+            
+            <xsd:attribute name="keywords">
+                <xsd:simpleType>
+                    <xsd:restriction base="sqltypes:character_varying">
+                        <xsd:minLength value="0"/>
+                        <xsd:maxLength value="1024"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>             
+            
+            
+            <!--  Field: category -->
+            
+            <xsd:attribute name="category" type="sqltypes:integer" />
+            
+            <!--  Field: author_name -->
+            
+            <xsd:attribute name="author_name">
+                <xsd:simpleType>
+                    <xsd:restriction base="sqltypes:character_varying">
+                        <xsd:minLength value="0"/>
+                        <xsd:maxLength value="1024"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>   
+                        
+            <!--  Field: author_username -->
+            
+            <xsd:attribute name="author_username">
+                <xsd:simpleType>
+                    <xsd:restriction base="sqltypes:character_varying">
+                        <xsd:minLength value="0"/>
+                        <xsd:maxLength value="1024"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>            
+            
+            <!--  Field: published -->
+            
+            <xsd:attribute name="published" use="required" default="0">
+                <xsd:simpleType>
+                    <xsd:restriction base="sqltypes:bit">
+                        <xsd:minLength value="0"/>
+                        <xsd:maxLength value="1"/>
+                    </xsd:restriction>
+                </xsd:simpleType>            
+            </xsd:attribute>
+            
+            <!--  Field: order -->
+            
+            <xsd:attribute name="order" type="sqltypes:integer" />
+                                                
+            <!--  Field: release_date  -->
+            
+            <xsd:attribute name="release_date" type="sqltypes:timestamp" />
+            
+            <!--  Field: _created  -->
+            
+            <xsd:attribute name="_created" type="sqltypes:timestamp" default="NOW" />
+            
+            <!--  End of Row -->
+        </xsd:complexType>        
+    </xsd:element>
+</xsd:schema>

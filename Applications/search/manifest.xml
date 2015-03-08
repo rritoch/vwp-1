@@ -1,0 +1,25 @@
+<application_manifest 
+ xmlns="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest http://standards.vnetpublishing.com/schemas/vwp/2010/10/ApplicationManifest/"
+ app="search">
+ <name>VWP - Search</name>
+ <author>Ralph Ritoch</author>
+ <author_link>http://www.vnetpublishing.com</author_link>
+ <copyright>Copyright Ralph Ritoch 2011 - ALL RIGHTS RESERVED</copyright>
+ <version>1.0.2</version>
+ <version_start_date></version_start_date>
+ <version_release_date></version_release_date> 
+ <folder name="setup" version="1.0.2">
+  <file>/installer.php</file>  
+ </folder>
+ <folder name="base" version="1.0.2">
+  <file>/manifest.xml</file>
+  <file>/models/search.php</file>
+  <file>/search.php</file>
+  <file>/widgets/search/layouts/html/default.php</file>
+  <file>/widgets/search/search.php</file>
+  <file>/widgets/box/box.php</file>
+  <file>/widgets/box/layouts/html/default.php</file>            
+ </folder>
+</application_manifest>
